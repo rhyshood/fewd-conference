@@ -1,0 +1,54 @@
+.whatson-container{
+    display: flex;
+    background-color: #ffffff;
+}
+
+.Session-bar{
+    background-color: #ffffff;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column; 
+    align-items: flex-start;
+    height: 84vh;
+    border: 1px solid #000;
+    width: 88px
+}
+
+.Session-buttons{
+    display: flex;
+    overflow: hidden;
+    flex-direction: column; 
+    align-items: flex-start;
+    
+}
+
+.Session-padding{
+    border-bottom: 2px solid #000000;
+}
+
+.Session-padding.top{
+    height: 80px;
+}
+
+.Session-padding.bottom{
+    flex-grow: 1;
+    width: 84px;
+}
+
+.sessionlinks {
+    height: 40px;
+    width: 88px;
+    background-color: #d6d6d6;
+    border: 2px solid #000000;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sessionlinks:hover {
+    background-color: #ddd;
+}
+
+.sessionlinks.active {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ffffff;
+}

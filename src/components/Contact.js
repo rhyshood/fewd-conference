@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './../styles/Main.css';
+import './../styles/Contact.css';
 
 function Contact() {
     const [email, setEmail] = useState("");
@@ -20,6 +21,7 @@ function Contact() {
                         />
                         <label>Message:</label>
                         <textarea 
+                            rows="12"
                             class="input text area"
                             value={body}
                             onChange={(e) => setBody(e.target.value)}

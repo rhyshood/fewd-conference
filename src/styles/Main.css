@@ -11,7 +11,6 @@
     justify-content: center;
     padding: 20px;
     padding-top: 10px;
-    width: 300px; 
     height: auto; 
     box-shadow: 0px 10px 16px rgba(0, 0, 0, 1);
     border-radius: 10px;
@@ -21,6 +20,10 @@
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.form-container p{
+    text-align: center;
 }
 
 .form-title{
@@ -42,7 +45,22 @@ label {
     margin-bottom: 5px;
 }
 
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between checkbox and label */
+    margin-bottom: 15px;
+}
+
+.checkbox-container label {
+    font-size: 1rem;
+    cursor: pointer; /* Clicking the label checks the box */
+}
+
+
 .input.text{
+    margin-bottom: 15px;
     padding: 10px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -57,6 +75,7 @@ label {
 }
 
 .submit-button {
+    margin-bottom: 10px;
     padding: 10px 20px;
     background-color: #1C4DFF;
     color: white;

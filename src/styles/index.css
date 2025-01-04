@@ -13,7 +13,8 @@ code {
 }
 
 #header{
-  background-color: #1C4DFF
+  background-color: #1C4DFF;
+  height: 120px;
 }
 
 #header-logo{
