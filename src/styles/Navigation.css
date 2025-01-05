@@ -12,13 +12,13 @@
 
 .Navigation-padding{
     flex-grow: 1;
-    height: 4vh;
+    height: 38px;
     border-bottom: 2px solid #000000
 }
 
 
 button {
-    height: 4vh;
+    height: 38px;
     background-color: #d6d6d6;
     float: left;
     border: 2px solid #000000;

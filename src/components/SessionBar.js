@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
 import './../styles/Main.css';
 import './../styles/WhatsOn.css';
 
-function SessionBar() {
-
-    function changePage(evt) {
+function SessionBar({activeSession, setActiveSession}) {
+    console.log(activeSession);
+    function changePage(evt, sessionID) {
         clearActive();
         evt.currentTarget.className += " active";
+        setActiveSession(sessionID)
     }
 
     function clearActive(){
@@ -19,14 +19,22 @@ function SessionBar() {
         }
     }
 
-    clearActive()
+    function checkActiveSession(buttonID){
+        
+        if (buttonID === activeSession){
+            return "sessionlinks active";
+        } else {
+            return "sessionlinks";
+        }
+    }
+
     return (
         <div class="Session-bar">
             <div class="Session-padding top"></div>
                <div class="Session-buttons">
-                    <Link to="whatson/session_a"><button class={"sessionlinks"} onClick={(evt) => changePage(evt)}>Session A</button></Link>
-                    <Link to="whatson/session_b"><button class={"sessionlinks"} onClick={(evt) => changePage(evt)}>Session B</button></Link>
-                    <Link to="whatson/session_c"><button class={"sessionlinks"} onClick={(evt) => changePage(evt)}>Session C</button></Link>
+                    <button class={checkActiveSession("A")} onClick={(evt) => changePage(evt, "A")}>Session A</button>
+                    <button class={checkActiveSession("B")} onClick={(evt) => changePage(evt, "B")}>Session B</button>
+                    <button class={checkActiveSession("C")} onClick={(evt) => changePage(evt, "C")}>Session C</button>
                 </div>
             <div class="Session-padding bottom"/>
         </div>

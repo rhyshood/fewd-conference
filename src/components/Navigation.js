@@ -1,6 +1,6 @@
 import React from "react";
 import './../styles/Navigation.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import { useLocalStorage } from './useLocalStorage';
 
 
