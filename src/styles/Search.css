@@ -1,0 +1,55 @@
+.whatson-container{
+    display: flex;
+    background-color: #ffffff;
+}
+
+.Search-bar{
+    background-color: #ffffff;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column; 
+    align-items: flex-start;
+    height: auto;
+    border: 1px solid #000;
+    width: 140px
+}
+
+.Search-buttons{
+    display: flex;
+    overflow: hidden;
+    flex-direction: column; 
+    align-items: flex-start;
+    
+}
+
+.Search-buttons button {
+    height: 45px;
+    width: 130px;
+    background-color: #d6d6d6;
+    border: 2px solid #000000;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.Search-buttons select {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Search-padding{
+    border-bottom: 2px solid #000000;
+}
+
+.Search-padding.top{
+    display: block ;
+    height: 60px;
+    width: 130px;
+}
+
+.Search-padding.bottom{
+    flex-grow: 1;
+    width: 84px;
+}

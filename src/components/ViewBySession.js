@@ -1,6 +1,6 @@
 import React from "react";
 import './../styles/Main.css';
-import LoggedOutTalk from "./TalkPreviews/LoggedOutTalk";
+import LoggedOutTalk from "./TalkViews/LoggedOutTalk";
 
 function ViewBySession({sessionID}) {
 

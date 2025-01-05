@@ -11,6 +11,10 @@
     margin-left: 10px;
 }
 
+.talk-button-container{
+    margin:10px;
+}
+
 .time-container {
     width: 210px;
     height: stretch;
@@ -25,7 +29,39 @@
 .talk-description-preview{
     overflow: hidden;
     width: 170ch;
+    height: 48px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+.detailed-rating-score {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.star-icon {
+    width: 50px;
+    height: auto; 
+}
+
+.detailed-description-container {
+    border: 1px solid #000
+}
+
+.detailed-description-container .header {
+    position:absolute;
+    margin-top: -15px;
+    margin-left:15px;
+    background: white;
+}
+
+.detailed-description-text {
+    margin-top: 5px;
+    width: 150ch;
+}
+
+.detailed-tag-list {
+    margin-top: 50px;
+    margin-bottom: 0px;
 }
