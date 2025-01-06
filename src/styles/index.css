@@ -13,6 +13,10 @@ code {
 }
 
 #header{
+  top:0;
+  position:fixed;
+  width:100%;
+  z-index: 1000;
   background-color: #1C4DFF;
   height: 120px;
 }

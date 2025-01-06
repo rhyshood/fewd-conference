@@ -1,3 +1,12 @@
+.action-area{
+    display:block;
+    position:fixed;
+    top:158px;
+    width:100%;
+    height:100%
+
+}
+
 .main-container{
     display:block;
     height: 100%;
@@ -17,7 +26,7 @@
     border-radius: 10px;
     margin: 0;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);

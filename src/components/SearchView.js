@@ -1,16 +1,16 @@
 import React from "react";
 import './../styles/Main.css';
-import EmptyTalk from "./TalkViews/EmptyTalk";
+import SearchTalk from "./TalkViews/SearchTalk";
 
-function SearchView({}) {
+function SearchView({ searchParameters }) {
 
     return (
         <div class="main-container">
-            <EmptyTalk />
-            <EmptyTalk />
-            <EmptyTalk />
-            <EmptyTalk />
-            <EmptyTalk />
+            <SearchTalk row={0} searchParameters = { searchParameters }/>
+            <SearchTalk row={1} searchParameters = { searchParameters }/>
+            <SearchTalk row={2} searchParameters = { searchParameters }/>
+            <SearchTalk row={3} searchParameters = { searchParameters }/>
+            <SearchTalk row={4} searchParameters = { searchParameters }/>
         </div>
     );
   };

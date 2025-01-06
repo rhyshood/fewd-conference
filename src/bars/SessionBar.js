@@ -3,7 +3,6 @@ import './../styles/Main.css';
 import './../styles/WhatsOn.css';
 
 function SessionBar({activeSession, setActiveSession}) {
-    console.log(activeSession);
     function changePage(evt, sessionID) {
         clearActive();
         evt.currentTarget.className += " active";

@@ -2,9 +2,9 @@ import React from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import DetailedPopUp from "./DetailedPopUp";
-import GetTalksInfoBySess from "../TalkInformation";
+import GetTalksInfoBySess from "../DBController";
 
-const LoggedOutTalk = ({ row, sessionID }) => {
+const WhatsOnTalk = ({ row, sessionID }) => {
     
     const {status, TalksInfo} = GetTalksInfoBySess(sessionID);
 
@@ -80,7 +80,7 @@ const LoggedOutTalk = ({ row, sessionID }) => {
         </div>
     );
     } else {
-    return<p>There is currently an issue displaying the food menu</p>}
+    return<p>There is currently an issue displaying the talk information</p>}
 };
 
-export default LoggedOutTalk;
+export default WhatsOnTalk;

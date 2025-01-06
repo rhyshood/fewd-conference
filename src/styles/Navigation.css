@@ -1,4 +1,8 @@
 .Navigation-bar{
+    position:fixed;
+    top: 120px;
+    width:100%;
+    z-index: 999;
     display: flex;
     background-color: #ffffff;
 }

@@ -4,12 +4,12 @@ import SearchView from "./SearchView";
 
 function Search() {
 
-    const [activeSession, setActiveSession] = useState("A");
-    
+    const [searchParameters, setSearchParameters] = useState("talks/")
+    console.log(searchParameters);
     return (
         <div class="whatson-container">
-            <SearchBar/>
-            <SearchView />
+            <SearchBar searchParameters = { searchParameters } setSearchParameters = { setSearchParameters }/>
+            <SearchView searchParameters = { searchParameters } />
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "leaflet/dist/leaflet.css";
+import "../styles/Main.css";
 import Login from "./Login";
 import Contact from "./Contact";
 import Navigation from "../bars/Navigation";
@@ -14,6 +15,7 @@ function App() {
     return (
         <BrowserRouter>
         <Navigation />
+        <div class="action-area">
       <Routes>
         <Route path="/" element={<Navigate to="/whatson" />} />
         <Route path="/whatson" element={<WhatsOn />} />
@@ -21,6 +23,7 @@ function App() {
         <Route path="login" element= {<Login/>} />
         <Route path="contact" element= {<Contact/>} />
       </Routes>
+      </div>
     </BrowserRouter>
 
     );

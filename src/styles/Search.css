@@ -6,37 +6,82 @@
 .Search-bar{
     background-color: #ffffff;
     display: flex;
-    overflow: hidden;
+    max-height: 790px;
     flex-direction: column; 
     align-items: flex-start;
     height: auto;
     border: 1px solid #000;
-    width: 140px
+    width: 190px
 }
 
 .Search-buttons{
     display: flex;
-    overflow: hidden;
+    overflow-y: auto;
     flex-direction: column; 
     align-items: flex-start;
     
 }
 
+.Search-buttons::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
+
 .Search-buttons button {
     height: 45px;
-    width: 130px;
+    width: 180px;
     background-color: #d6d6d6;
     border: 2px solid #000000;
     cursor: pointer;
     transition: 0.3s;
+    flex-shrink: 0;
 }
 
 .Search-buttons select {
     margin-top: 5px;
     margin-bottom: 15px;
-    width: 110px;
+    width: 170px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.tag-list {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 170px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tag-checkbox{
+    margin-left: 5px
+}
+
+.rating-container{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 170px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.time-search-container{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 170px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.time-search-container select {
+    width:160px;
+}
+
+.rating-textbox{
+    width:5ch;
+    margin-left: 5px;
 }
 
 .Search-padding{
@@ -50,6 +95,7 @@
 }
 
 .Search-padding.bottom{
-    flex-grow: 1;
+    flex-grow: 0;
     width: 84px;
 }
+

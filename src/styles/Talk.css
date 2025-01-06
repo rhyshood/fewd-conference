@@ -16,6 +16,7 @@
 }
 
 .time-container {
+    display:block;
     width: 210px;
     height: stretch;
     border-right: 1px solid #000;
