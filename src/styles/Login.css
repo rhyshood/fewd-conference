@@ -5,3 +5,20 @@
 .register-container p{
     margin-bottom: 3px;
 }
+
+.register-form-container{
+    width: 450px;
+    height: 580px;
+}
+
+.form-title.register{
+    margin-bottom: 35px;
+}
+
+.register-password-container{
+    margin-bottom: 15px;
+}
+
+.checkbox-container.register{
+    margin-bottom: 25px;
+}

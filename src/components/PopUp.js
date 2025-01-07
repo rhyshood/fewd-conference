@@ -1,6 +1,6 @@
 import React from "react";
 
-const DetailedPopUp = ({ isOpen, onClose, children }) => {
+const PopUp = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
     return (
@@ -16,16 +16,21 @@ const DetailedPopUp = ({ isOpen, onClose, children }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                zIndex: 994,
             }}
         >
             <div
+                class="popup-container"
+                onClick={(event) => event.stopPropagation()}
                 style={{
+                    position: "fixed",
+                    top: 188,
                     background: "white",
                     margin: "auto",
                     padding: "1%",
                     border: "2px solid #000",
                     borderRadius: "10px",
-                    boxShadow: "2px solid black",
+                    boxShadow: "2px solid black"
                 }}
             >
                 {children}
@@ -34,4 +39,4 @@ const DetailedPopUp = ({ isOpen, onClose, children }) => {
     );
 };
 
-export default DetailedPopUp;
+export default PopUp;

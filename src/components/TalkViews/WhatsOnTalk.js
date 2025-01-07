@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
-import DetailedPopUp from "./DetailedPopUp";
+import PopUp from "../PopUp";
 import GetTalksInfoBySess from "../DBController";
 
 const WhatsOnTalk = ({ row, sessionID }) => {
@@ -10,7 +10,7 @@ const WhatsOnTalk = ({ row, sessionID }) => {
 
     let TalkInfo = TalksInfo[row];
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
@@ -59,7 +59,7 @@ const WhatsOnTalk = ({ row, sessionID }) => {
                 </div>
                 <div class="talk-button-container">
                     <button type="button" onClick={handleOpen}>View Full Details</button>
-                    <DetailedPopUp isOpen={open} onClose={handleClose}>
+                    <PopUp isOpen={open} onClose={handleClose}>
                     <>
                         <h1>{TalkInfo.title}</h1>
                         <h2>{TalkInfo.speaker}</h2>
@@ -74,7 +74,7 @@ const WhatsOnTalk = ({ row, sessionID }) => {
                         </div>
                         <p class="detailed-tag-list">Tags: {getListOfTags(TalkInfo.tags)}</p>
                     </>
-                    </DetailedPopUp>
+                    </PopUp>
                 </div>
             </div>
         </div>
