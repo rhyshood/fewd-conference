@@ -8,7 +8,8 @@
 
 .register-form-container{
     width: 450px;
-    height: 580px;
+    height: auto;
+    margin:10px;
 }
 
 .form-title.register{

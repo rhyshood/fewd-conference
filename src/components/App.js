@@ -8,19 +8,25 @@ import Contact from "./Contact";
 import Navigation from "../bars/Navigation";
 import WhatsOn from "./WhatsOn";
 import Search from "./Search";
+import Profile from "./Profile";
+import { useLocalStorage } from '../components/useLocalStorage';
 
 
 function App() {
-
+    const [loggedInEmail, setLoggedInEmail] = useLocalStorage("loggedInEmail", "");
+    if(loggedInEmail === ""){
+      setLoggedInEmail("r@r.com");
+    }
     return (
         <BrowserRouter>
-        <Navigation />
+        <Navigation setLoggedInEmail = { setLoggedInEmail }/>
         <div class="action-area">
       <Routes>
         <Route path="/" element={<Navigate to="/whatson" />} />
         <Route path="/whatson" element={<WhatsOn />} />
         <Route path="/search" element={<Search />} />
-        <Route path="login" element= {<Login/>} />
+        <Route path="login" element= {loggedInEmail !== "" ? <Navigate to="/profile" /> : <Login />} />
+        <Route path="profile" element= {loggedInEmail === "" ? <Navigate to="/login" /> : <Profile setLoggedInEmail={setLoggedInEmail}/>} />
         <Route path="contact" element= {<Contact/>} />
       </Routes>
       </div>

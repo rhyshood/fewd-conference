@@ -1,12 +1,9 @@
 import React from "react";
 import './../styles/Navigation.css';
 import { Link, useLocation} from 'react-router-dom';
-import { useLocalStorage } from '../components/useLocalStorage';
 
 
-function Navigation() {
-
-    const [loggedIn, setLoggedIn] =  useLocalStorage("loggedIn", JSON.stringify(false));
+function Navigation({loggedInEmail}) {
 
     function clearActive(){
         var i, navlinks;
@@ -32,9 +29,9 @@ function Navigation() {
     }
 
     function checkIfLoggedIn(){
-        if (loggedIn === true) {
+        if (loggedInEmail !== "") {
             return (
-                <Link to="/"><button class={CheckLocation("profile")} onClick={(evt) => changePage(evt)}>My Profile</button></Link>
+                <Link to="profile"><button class={CheckLocation("profile")} onClick={(evt) => changePage(evt)}>My Profile</button></Link>
             );
         } else {
             return (

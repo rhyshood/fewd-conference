@@ -20,6 +20,10 @@
     border-bottom: 2px solid #000000
 }
 
+.account-info{
+    display: flex;
+    align-items: center;   
+}
 
 button {
     height: 38px;

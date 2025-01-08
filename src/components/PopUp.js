@@ -1,11 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 
 const PopUp = ({ isOpen, onClose, children }) => {
+    const [isMouseDown, setIsMouseDown] = useState(false);
     if (!isOpen) return null;
+
+    const handleMouseDown = (event) => {
+        if (event.target.className === "popup-main-container") {
+         setIsMouseDown(true);
+        }
+    };
+    
+    const handleMouseUp = (event) => {
+        if (isMouseDown) {
+          onClose(); 
+        }
+        setIsMouseDown(false); 
+    };
 
     return (
         <div
-            onClick={onClose}
+            class="popup-main-container"
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
             style={{
                 position: "fixed",
                 top: 0,

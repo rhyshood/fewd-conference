@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const talkControllers = require("../controllers/talkControllers");
+const accountControllers = require("../controllers/accountControllers");
 
 
 // router.get("/setup", controller.newList);
 
+
+// Routes relating to Talk Info
 router.get("/talks", talkControllers.listConf);
 router.get('/talks/speaker/:term', talkControllers.listOneSpeaker);
 router.get('/talks/session/:term', talkControllers.listSession);
@@ -16,6 +19,10 @@ router.get('/talks/rate/:id/:rating', talkControllers.rateTalkById)
 router.get('/talks/speakers', talkControllers.listAllSpeakers)
 router.get('/talks/tags', talkControllers.listAllTags)
 router.post('/talks/posts', talkControllers.handlePosts)
+
+//  Routes relating to Account
+router.get('/account/login/email/:email/pass/:pass', accountControllers.checkPassword)
+router.post('/account/create', accountControllers.createNewAccount)
 
 router.use(function (req, res) {
   res.status(404);

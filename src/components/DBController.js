@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import bcrypt from 'bcryptjs';
 
 function formatTime(time){
     let formatted = time.replace(":", "");
@@ -124,4 +125,40 @@ export function GetAllTags(){
     fetchData();
   }, [fetchData]);
   return { tagStatus, tags};
+}
+
+export function GetCreateAccount(){
+  const createAccount = useCallback(async (fName, lName, email, password) => {
+    let createStatus = "idle";
+    let res = {};
+    const url = "http://localhost:3001/account/create";
+    const requestBody = {
+      fName: fName,
+      lName: lName,
+      email: email,
+      password: bcrypt.hashSync(password, '$2a$10$CwTycUXWue0Thq9StjUM0u')
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    })
+    .then((response) => response.json())
+    .then((incomingData) => {
+      res = incomingData;
+      createStatus ='fetched';
+    })
+    .catch((err) => {
+      console.error(err);
+      createStatus ='error';
+    });
+
+    return {createStatus, res}
+    
+  }, []);
+
+  return {createAccount};
 }

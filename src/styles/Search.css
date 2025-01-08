@@ -23,7 +23,7 @@
 }
 
 .Search-buttons::-webkit-scrollbar {
-    display: none; /* Hides the scrollbar */
+    display: none;
 }
 
 .Search-buttons button {
