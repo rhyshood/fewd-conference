@@ -52,3 +52,28 @@ exports.createNewAccount = function (req, res) {
         res.json({"message":err});
       });
   };
+
+  exports.fetchItineraryIDs = function (req, res) {
+    let email = req.params["email"];
+    account
+      .fetchItineraryIDs(email)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json({"message":err});
+      });
+  };
+
+  exports.addToItinerary = function (req, res) {
+    let talkId = req.params["id"];
+    let talkTime = req.params["talkTime"];
+    let email = req.params["email"];
+  
+    account
+      .addToItinerary(email, talkId, talkTime)
+      .then((result) => {res.json(result)})
+      .catch((err) => {
+        res.json({"message":err});
+      });
+  };

@@ -79,7 +79,9 @@ class Account {
                         emailAddress: email,
                         password: password,
                         saved: [],
-                        itinerary: []
+                        itinerary: [{
+                          "9:00":"",
+                        }]
                     });
                     resolve("Account Created Successfully")
                 } else {
@@ -100,6 +102,35 @@ class Account {
                resolve(entries);
             }
           });
+        });
+      }
+
+      fetchItineraryIDs(email){
+        return new Promise((resolve, reject) => {
+            this.account.find({emailAddress:email}, function (err, entries) {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(entries);
+              }
+            });
+          });
+    }
+
+    async addToItinerary(email,talkId,talkTime){
+      let currentEntry = await this.fetchItineraryIDs(email)[talkTime];
+          return new Promise((resolve, reject) => {
+            if (currentEntry === ""){
+              this.account.update({emailAddress:email},{$push:{'saved':talkId}}, function (err, entries) {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(entries);
+              }
+            });
+          } else {
+            reject("Conflicting Time")
+          }
         });
       }
 }
