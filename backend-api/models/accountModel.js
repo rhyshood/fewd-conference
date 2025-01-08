@@ -81,6 +81,10 @@ class Account {
                         saved: [],
                         itinerary: [{
                           "9:00":"",
+                          "10:30":"",
+                          "12:00":"",
+                          "14:00":"",
+                          "15:30":""
                         }]
                     });
                     resolve("Account Created Successfully")
@@ -111,7 +115,7 @@ class Account {
               if (err) {
                 reject(err);
               } else {
-                resolve(entries);
+                resolve(entries[0].saved);
               }
             });
           });

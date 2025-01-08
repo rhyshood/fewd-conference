@@ -39,6 +39,13 @@ function Profile({loggedInEmail, setloggedInEmail}) {
         return (
             <div class="profile-container">
                 <ProfileBar activePage={activePage} setActivePage={setActivePage}/>
+                <div class="main-container">
+                    <ItineraryTalk timeTalk={"9:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk timeTalk={"10:30"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk timeTalk={"12:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk timeTalk={"14:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk timeTalk={"15:30"} loggedInEmail={loggedInEmail}/>
+                </div>
             </div>
         );
     }

@@ -224,3 +224,28 @@ export function GetSavedIDs(email){
 
   return { savedTalkStatus, savedTalks};
 }
+
+export function GetItineraryID(email, talkTime){
+  const [savedTalkStatus, setSavedTalkStatus] = useState('idle');
+  const [itineraryID, setItineraryID]=useState([{
+    [talkTime]:""
+  }]);
+
+  const fetchData = useCallback(() => {
+    const url = "http://localhost:3001/account/itinerary/email/" + email + "/talkTime/" + talkTime;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((incomingData) => {
+        setItineraryID(incomingData[talkTime]);
+        setSavedTalkStatus('fetched');
+      })
+      .catch((err) => console.error(err));
+  }, [email, talkTime]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { savedTalkStatus, savedTalks};
+}

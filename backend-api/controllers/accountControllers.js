@@ -53,12 +53,13 @@ exports.createNewAccount = function (req, res) {
       });
   };
 
-  exports.fetchItineraryIDs = function (req, res) {
+  exports.fetchItineraryID = function (req, res) {
     let email = req.params["email"];
+    let talkTime = req.params["talkTime"];
     account
       .fetchItineraryIDs(email)
       .then((result) => {
-        res.json(result);
+        res.json(result[0].itinerary[talkTime]);
       })
       .catch((err) => {
         res.json({"message":err});
