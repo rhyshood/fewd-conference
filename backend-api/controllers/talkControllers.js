@@ -5,6 +5,7 @@ exports.newList = function (req, res) {
   conf.init();
   res.redirect("/");
 };
+
 exports.listConf = function (req, res) {
   conf
     .getAllEntries()
@@ -117,6 +118,18 @@ exports.listRatingsById = function (req, res) {
     .then((list) => {
       res.json(list[0].ratings);
       console.log("ratings: ", list[0].ratings);
+    })
+    .catch((err) => {
+      console.log("promise rejected", err);
+    });
+};
+
+exports.getTalkById = function (req, res) {
+  let talkId = req.params["id"];
+  conf
+    .getTalkById(talkId)
+    .then((list) => {
+      res.json(list);
     })
     .catch((err) => {
       console.log("promise rejected", err);

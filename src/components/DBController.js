@@ -162,3 +162,65 @@ export function GetCreateAccount(){
 
   return {createAccount};
 }
+
+export function GetTalkById(TalkID){
+  const [talkStatus, setTalkStatus] = useState('idle');
+  const [Talk, setTalk]=useState([{
+    id: "",
+    speaker: "", 
+    title: "", 
+    description: "",
+    time: "",
+    tags: [],
+    ratings: []
+  }]);
+
+  const fetchData = useCallback(() => {
+    const url = "http://localhost:3001/talks/id/" + TalkID;
+    fetch(url)
+      .then((response) => response.json())
+      .then((incomingData) => {
+          if (incomingData.length===1){
+          setTalk(incomingData);
+          setTalkStatus('fetched');
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [TalkID]);
+  
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+  return { talkStatus, Talk};
+}
+
+export function GetSavedIDs(email){
+  const [savedTalkStatus, setSavedTalkStatus] = useState('idle');
+  const [savedTalks, setSavedTalks]=useState([{
+    firstName: "",
+    firstName: "",
+    emailAddress: "",
+    password: "",
+    saved: [],
+    itinerary: [],
+    _id: ""
+  }]);
+
+  const fetchData = useCallback(() => {
+    const url = "http://localhost:3001/account/savedID/email/" + email;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((incomingData) => {
+        setSavedTalks(incomingData);
+        setSavedTalkStatus('fetched');
+      })
+      .catch((err) => console.error(err));
+  }, [email]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { savedTalkStatus, savedTalks};
+}

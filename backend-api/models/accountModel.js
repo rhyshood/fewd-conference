@@ -55,6 +55,19 @@ class Account {
           });
     }
 
+    fetchSavedIDs(email){
+        console.log("called")
+        return new Promise((resolve, reject) => {
+            this.account.find({emailAddress:email}, function (err, entries) {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(entries);
+              }
+            });
+          });
+    }
+
     async createNewAccount(fName, lName, email, password) {
         const isDuplicate = await this.checkDuplicateEmail(email);
         return new Promise((resolve, reject) => {
@@ -65,7 +78,7 @@ class Account {
                         lastName: lName,
                         emailAddress: email,
                         password: password,
-                        interested: [],
+                        saved: [],
                         itinerary: []
                     });
                     resolve("Account Created Successfully")
@@ -77,5 +90,17 @@ class Account {
             }
         });
     }
+
+    addToSaved(email,talkId){
+          return new Promise((resolve, reject) => {
+            this.account.update({emailAddress:email},{$push:{'saved':talkId}}, function (err, entries) {
+            if (err) {
+              reject(err);
+            } else {
+               resolve(entries);
+            }
+          });
+        });
+      }
 }
 module.exports = Account;

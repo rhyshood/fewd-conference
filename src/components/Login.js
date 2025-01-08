@@ -81,10 +81,6 @@ function Login() {
         } else {
             setMessage("Error: Please Complete All Fields");
         }
-
-        if (message === ""){
-            setMessage("Error: Email Already Registered");
-        }
     }
 
     return (

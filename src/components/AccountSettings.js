@@ -27,10 +27,21 @@ const AccountSettings = ({ loggedInEmail }) => {
                         <p class="account-info-text">r@r.com</p>
                     </div>
                 </div>
+                <div class="account-settings-button-container">
+                    <button>Update Account Information</button>
+                    <button>Update Password</button>
+                </div>
             </div>
             <div class="account-setting-category-container">
                 <div class="header">Security</div>
-                <p class="account-info-text">gg</p>
+                <div class="account-info-fields">
+                        <p class="account-info-text">Two Factor-Authentication:</p>
+                        <p class="account-info-text">Disabled</p>
+                </div>
+                <div class="account-settings-button-container">
+                    <button>Enable 2FA</button>
+                    <button>Delete Account</button>
+                </div>
             </div>
         </div>
     );

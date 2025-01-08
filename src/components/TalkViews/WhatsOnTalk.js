@@ -4,9 +4,10 @@ import './../../styles/Talk.css';
 import PopUp from "../PopUp";
 import GetTalksInfoBySess from "../DBController";
 
-const WhatsOnTalk = ({ row, sessionID }) => {
+const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     
     const {status, TalksInfo} = GetTalksInfoBySess(sessionID);
+    
 
     let TalkInfo = TalksInfo[row];
 
@@ -59,6 +60,8 @@ const WhatsOnTalk = ({ row, sessionID }) => {
                 </div>
                 <div class="talk-button-container">
                     <button type="button" onClick={handleOpen}>View Full Details</button>
+                    {loggedInEmail !== "" ? <button type="button" onClick={handleOpen}>Add to Saved</button> : null}
+                    {loggedInEmail !== "" ? <button type="button" onClick={handleOpen}>Add to Itinerary</button> : null}
                     <PopUp isOpen={open} onClose={handleClose}>
                     <>
                         <h1>{TalkInfo.title}</h1>

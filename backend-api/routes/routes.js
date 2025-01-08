@@ -13,6 +13,7 @@ router.get('/talks/speaker/:term', talkControllers.listOneSpeaker);
 router.get('/talks/session/:term', talkControllers.listSession);
 router.get('/talks/time/:term', talkControllers.listTime);
 router.get('/talks/:speaker/rating', talkControllers.listRatingsBySpeaker);
+router.get('/talks/id/:id/', talkControllers.getTalkById);
 router.get('/talks/:id/ratingById', talkControllers.listRatingsById);
 router.get('/talks/speaker/:speaker/session/:session/times/:times/tags/:tags/rating/:rating', talkControllers.listSearchQuery);
 router.get('/talks/rate/:id/:rating', talkControllers.rateTalkById)
@@ -23,6 +24,8 @@ router.post('/talks/posts', talkControllers.handlePosts)
 //  Routes relating to Account
 router.get('/account/login/email/:email/pass/:pass', accountControllers.checkPassword)
 router.post('/account/create', accountControllers.createNewAccount)
+router.get('/account/savedID/email/:email', accountControllers.fetchSavedIDs)
+router.get('/account/addSavedID/email/:email/id/:id', accountControllers.addToSaved)
 
 router.use(function (req, res) {
   res.status(404);

@@ -15,7 +15,7 @@ import { useLocalStorage } from '../components/useLocalStorage';
 function App() {
     const [loggedInEmail, setLoggedInEmail] = useLocalStorage("loggedInEmail", "");
     if(loggedInEmail === ""){
-      setLoggedInEmail("r@r.com");
+      setLoggedInEmail("R@R.com");
     }
     return (
         <BrowserRouter>
@@ -23,10 +23,10 @@ function App() {
         <div class="action-area">
       <Routes>
         <Route path="/" element={<Navigate to="/whatson" />} />
-        <Route path="/whatson" element={<WhatsOn />} />
+        <Route path="/whatson" element={<WhatsOn loggedInEmail={loggedInEmail}/>} />
         <Route path="/search" element={<Search />} />
         <Route path="login" element= {loggedInEmail !== "" ? <Navigate to="/profile" /> : <Login />} />
-        <Route path="profile" element= {loggedInEmail === "" ? <Navigate to="/login" /> : <Profile setLoggedInEmail={setLoggedInEmail}/>} />
+        <Route path="profile" element= {loggedInEmail === "" ? <Navigate to="/login" /> : <Profile loggedInEmail={loggedInEmail} setLoggedInEmail={setLoggedInEmail}/>} />
         <Route path="contact" element= {<Contact/>} />
       </Routes>
       </div>
