@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import { GetItineraryID, GetTalkById } from "../DBController";
+import { GetTalkById } from "../DBController";
 import EmptyTalk from "./EmptyTalk";
 
-const ItineraryTalk = ({ talkTime, loggedInEmail  }) => {
-    const {talkStatus, Talk} = GetItineraryID(loggedInEmail, talkTime);
+const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
+    const {talkStatus, Talk} = GetTalkById(TalkID);
     console.log(Talk)
     const [open, setOpen] = useState(false);
 

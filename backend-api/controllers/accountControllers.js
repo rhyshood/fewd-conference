@@ -92,11 +92,10 @@ exports.createNewAccount = function (req, res) {
 
   exports.fetchItineraryID = function (req, res) {
     let email = req.params["email"];
-    let talkTime = req.params["talkTime"];
     account
       .fetchItineraryIDs(email)
       .then((result) => {
-        res.json(result[0].itinerary[talkTime]);
+        res.json(result);
       })
       .catch((err) => {
         res.json({"message":err});

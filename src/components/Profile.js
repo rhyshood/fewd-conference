@@ -10,12 +10,14 @@ import { GetAccountInfo } from "./DBController";
 
 function Profile({loggedInEmail, setLoggedInEmail}) {
     const [listofSavedIDs, setMasterSavedList] = useState([]);
+    const [listOfItinerary, setMasterItineraryList] = useState({})
     const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
     useEffect(() => {
         if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
             setMasterSavedList(accountInfo[0].saved); 
+            setMasterItineraryList(accountInfo[0].itinerary);
         }
-      }, [accountInfoStatus, accountInfo, setMasterSavedList]);
+      }, [accountInfoStatus, accountInfo, setMasterSavedList, setMasterItineraryList]);
 
       const [activePage, setActivePage] = useState(1);
     if (activePage === 1){
@@ -50,11 +52,17 @@ function Profile({loggedInEmail, setLoggedInEmail}) {
             <div class="profile-container">
                 <ProfileBar activePage={activePage} setActivePage={setActivePage} setLoggedInEmail={setLoggedInEmail}/>
                 <div class="main-container">
-                    <ItineraryTalk talkTime={"9:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk talkTime={"10:30"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk talkTime={"12:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk talkTime={"14:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk talkTime={"15:30"} loggedInEmail={loggedInEmail}/>
+                <div class="saved-talk-container">
+                        {accountInfoStatus === "fetched"? 
+                            <div class="saved-talk-container">
+                            <ItineraryTalk TalkID={listOfItinerary["9:00"]} loggedInEmail={loggedInEmail} setMasterItineraryList={setMasterItineraryList}/>
+                            <ItineraryTalk TalkID={listOfItinerary["10:30"]} loggedInEmail={loggedInEmail} setMasterItineraryList={setMasterItineraryList}/>
+                            <ItineraryTalk TalkID={listOfItinerary["12:00"]} loggedInEmail={loggedInEmail} setMasterItineraryList={setMasterItineraryList}/>
+                            <ItineraryTalk TalkID={listOfItinerary["14:00"]} loggedInEmail={loggedInEmail} setMasterItineraryList={setMasterItineraryList}/>
+                            <ItineraryTalk TalkID={listOfItinerary["15:30"]} loggedInEmail={loggedInEmail} setMasterItineraryList={setMasterItineraryList}/>
+                            </div>
+                        : <EmptyCollection type={0}/> }
+                    </div>
                 </div>
             </div>
         );

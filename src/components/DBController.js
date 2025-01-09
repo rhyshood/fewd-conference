@@ -231,29 +231,27 @@ export function GetAccountInfo(email){
   return { accountInfoStatus, accountInfo};
 }
 
-export function GetItineraryID(email, talkTime){
+export function GetItineraryID(email){
   const [itineraryIDStatus, setItineraryIDStatus] = useState('idle');
-  const [itineraryID, setItineraryID]=useState([{
-    [talkTime]:""
-  }]);
+  const [itineraryIDs, setItineraryIDs]=useState({});
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/account/itinerary/email/" + email + "/talkTime/" + talkTime;
+    const url = "http://localhost:3001/account/itinerary/email/" + email;
 
     fetch(url)
       .then((response) => response.json())
       .then((incomingData) => {
-        setItineraryID(incomingData[talkTime]);
+        setItineraryIDs(incomingData);
         setItineraryIDStatus('fetched');
       })
       .catch((err) => console.error(err));
-  }, [email, talkTime]);
+  }, [email]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return { itineraryIDStatus, itineraryID};
+  return { itineraryIDStatus, itineraryIDs};
 }
 
 export function useCheckLogin(email, password) {

@@ -144,13 +144,13 @@ class Account {
     });
   }
 
-        async fetchItineraryIDs(email,){
+        async fetchItineraryIDs(email){
             return new Promise((resolve, reject) => {
                 this.account.update({emailAddress:email}, function (err, entries) {
                 if (err) {
                   reject(err);
                 } else {
-                  resolve(entries);
+                  resolve(entries[0].itinerary);
                 }
               });
           });
