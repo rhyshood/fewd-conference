@@ -110,3 +110,17 @@
 .account-settings-button-container button{
     margin-bottom: 10px;
 }
+
+.main-container.saved{
+    display: flex;
+    flex-direction: column;
+}
+
+.saved-talk-container{
+    width:100%;
+    max-height: 800px;  /* Set a max height for the container */
+    overflow-y: auto; 
+}
+.saved-talk-container::-webkit-scrollbar {
+    display: none;
+}

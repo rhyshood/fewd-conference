@@ -7,12 +7,21 @@
     margin-right: auto;
 }
 
+.talk-container.saved{
+    display: flex;
+    height:auto;
+}
+
 .talk-information-container{
     margin-left: 10px;
 }
 
 .talk-button-container{
     margin:10px;
+}
+
+.talk-button-container.saved button{
+    margin-bottom: 10px;
 }
 
 .time-container {

@@ -47,7 +47,8 @@ function Navigation({loggedInEmail}) {
             <div class="Navigation-buttons">
                 <Link to="/"><button class={CheckLocation("whatson")} onClick={(evt) => changePage(evt)}>What's On</button></Link>
                 <Link to="/search"><button class={CheckLocation("search")} onClick={(evt) => changePage(evt)}>Search</button></Link>
-                {checkIfLoggedIn()}
+                {loggedInEmail !== "" ? <Link to="profile"><button class={CheckLocation("profile")} onClick={(evt) => changePage(evt)}>My Profile</button></Link>
+                : <Link to="login"><button class={CheckLocation("login")} onClick={(evt) => changePage(evt)}>Log In</button></Link>}
                 <Link to="/contact"><button class={CheckLocation("contact")} onClick={(evt) => changePage(evt)}>Contact Us</button></Link>
             </div>
             <div class="Navigation-padding right"/>

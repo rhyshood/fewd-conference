@@ -20,12 +20,10 @@ class Account {
               if (err) {
                 reject(err);
               } else {
-                let result = false;
-                if(entry.password === pass){
-                    result = true;
+                if(entry[0].password === pass){
+                    resolve(true);
                 }
-                resolve(result);
-                console.log("function checkPassword() returns: ", result);
+                resolve(false);
               }
             });
           });
@@ -43,20 +41,7 @@ class Account {
           });
     }
 
-    checkPassword(email, enteredPassword){
-        return new Promise((resolve, reject) => {
-            this.account.find({emailAddress:email}, function (err, entries) {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(enteredPassword === entries.password);
-              }
-            });
-          });
-    }
-
     fetchSavedIDs(email){
-        console.log("called")
         return new Promise((resolve, reject) => {
             this.account.find({emailAddress:email}, function (err, entries) {
               if (err) {
@@ -79,13 +64,13 @@ class Account {
                         emailAddress: email,
                         password: password,
                         saved: [],
-                        itinerary: [{
+                        itinerary: {
                           "9:00":"",
                           "10:30":"",
                           "12:00":"",
                           "14:00":"",
                           "15:30":""
-                        }]
+                        }
                     });
                     resolve("Account Created Successfully")
                 } else {
@@ -99,7 +84,7 @@ class Account {
 
     addToSaved(email,talkId){
           return new Promise((resolve, reject) => {
-            this.account.update({emailAddress:email},{$push:{'saved':talkId}}, function (err, entries) {
+            this.account.update({emailAddress:email},{$addToSet:{'saved':talkId}}, function (err, entries) {
             if (err) {
               reject(err);
             } else {
@@ -108,6 +93,18 @@ class Account {
           });
         });
       }
+
+      removeFromSaved(email,talkId){
+        return new Promise((resolve, reject) => {
+          this.account.update({emailAddress:email},{$pull:{'saved':talkId}}, function (err, entries) {
+          if (err) {
+            reject(err);
+          } else {
+             resolve(entries);
+          }
+        });
+      });
+    }
 
       fetchItineraryIDs(email){
         return new Promise((resolve, reject) => {
@@ -122,20 +119,43 @@ class Account {
     }
 
     async addToItinerary(email,talkId,talkTime){
-      let currentEntry = await this.fetchItineraryIDs(email)[talkTime];
+            console.log(talkTime);
           return new Promise((resolve, reject) => {
-            if (currentEntry === ""){
-              this.account.update({emailAddress:email},{$push:{'saved':talkId}}, function (err, entries) {
+              this.account.update({emailAddress:email},{$set:{[`itinerary.${talkTime}`]:talkId}}, function (err, entries) {
               if (err) {
                 reject(err);
               } else {
                 resolve(entries);
               }
             });
-          } else {
-            reject("Conflicting Time")
-          }
         });
       }
+
+      async removeFromItinerary(email,talkId,talkTime){
+        console.log(talkTime);
+      return new Promise((resolve, reject) => {
+          this.account.update({emailAddress:email},{$pull:{[`itinerary.${talkTime}`]:talkId}}, function (err, entries) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(entries);
+          }
+        });
+    });
+  }
+
+        async fetchItineraryIDs(email,){
+            return new Promise((resolve, reject) => {
+                this.account.update({emailAddress:email}, function (err, entries) {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(entries);
+                }
+              });
+          });
+        }
 }
+
+
 module.exports = Account;

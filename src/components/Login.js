@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import PopUp from "./PopUp";
 import './../styles/Main.css';
 import './../styles/Login.css';
-import { GetCreateAccount } from "./DBController";
+import { GetCreateAccount, useCheckLogin } from "./DBController";
 
-function Login() {
+function Login({setLoggedInEmail}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [cPassword, setCPassword] = useState("");
@@ -13,9 +13,10 @@ function Login() {
     const [lName, setlName] = useState("");
     const [acceptedPP, setAcceptedPP] = useState(false);
     const [open, setOpen] = useState(false);
+    const { logInCheckStatus, loggedIn } = useCheckLogin(email, password);
 
     const { createAccount } = GetCreateAccount();
-
+    
     function resetComponents(){
         setEmail("");
         setPassword("");
@@ -25,6 +26,18 @@ function Login() {
         setlName("");
     }
     
+    function handleLogin(){
+        if(password !== "" && email !== "" ){
+            if(logInCheckStatus === "fetched" && loggedIn){
+                setLoggedInEmail(email);
+            } else {
+                setMessage("Error: Incorrect Email/Password")
+            }
+        } else {
+            setMessage("Error: Please Complete All Fields")
+        }
+    }
+
     const handleClose = () => {
         setOpen(false);
         resetComponents();
@@ -144,8 +157,8 @@ function Login() {
                 </PopUp>
                 <div class="form-container">
                     <h1 class="form-title">Log In</h1>
+                    <p class="form-error-text">{message}</p>
                     <div class="form-inputs">
-                        <form>
                             <label>Email Address:</label>
                             <input 
                                 class="input text"
@@ -160,12 +173,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <div class="checkbox-container">
-                                <label for="stayLoggedIn"> Stay Logged In</label>
-                                <input type="checkbox" id="stayLoggedIn" name="stayLoggedIn" value="Yes"/>
-                            </div>
-                            <input class="submit-button" type="submit" value="Log In"/>
-                        </form>
+                            <button class="submit-button" onClick={handleLogin}>Log In</button>
                         <p class="popup-open-text">Forgot Your Password</p>
                         <div class="register-container">
                             <p>Don't have an account yet?</p>

@@ -5,8 +5,8 @@ import PopUp from "../PopUp";
 import { GetItineraryID, GetTalkById } from "../DBController";
 import EmptyTalk from "./EmptyTalk";
 
-const ItineraryTalk = ({ timeTalk, loggedInEmail  }) => {
-    const {talkStatus, Talk} = GetItineraryID(email, talkTime);
+const ItineraryTalk = ({ talkTime, loggedInEmail  }) => {
+    const {talkStatus, Talk} = GetItineraryID(loggedInEmail, talkTime);
     console.log(Talk)
     const [open, setOpen] = useState(false);
 

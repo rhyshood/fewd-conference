@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import bcrypt from 'bcryptjs';
 
 function formatTime(time){
@@ -194,15 +194,21 @@ export function GetTalkById(TalkID){
   return { talkStatus, Talk};
 }
 
-export function GetSavedIDs(email){
-  const [savedTalkStatus, setSavedTalkStatus] = useState('idle');
-  const [savedTalks, setSavedTalks]=useState([{
+export function GetAccountInfo(email){
+  const [accountInfoStatus, setAccountInfoStatus] = useState('idle');
+  const [accountInfo, setAccountInfo]=useState([{
     firstName: "",
     firstName: "",
     emailAddress: "",
     password: "",
     saved: [],
-    itinerary: [],
+    itinerary: [{
+      "9:00":"",
+      "10:30":"",
+      "12:00":"",
+      "14:00":"",
+      "15:30":"",
+    }],
     _id: ""
   }]);
 
@@ -212,8 +218,8 @@ export function GetSavedIDs(email){
     fetch(url)
       .then((response) => response.json())
       .then((incomingData) => {
-        setSavedTalks(incomingData);
-        setSavedTalkStatus('fetched');
+        setAccountInfo(incomingData);
+        setAccountInfoStatus('fetched');
       })
       .catch((err) => console.error(err));
   }, [email]);
@@ -222,11 +228,11 @@ export function GetSavedIDs(email){
     fetchData();
   }, [fetchData]);
 
-  return { savedTalkStatus, savedTalks};
+  return { accountInfoStatus, accountInfo};
 }
 
 export function GetItineraryID(email, talkTime){
-  const [savedTalkStatus, setSavedTalkStatus] = useState('idle');
+  const [itineraryIDStatus, setItineraryIDStatus] = useState('idle');
   const [itineraryID, setItineraryID]=useState([{
     [talkTime]:""
   }]);
@@ -238,7 +244,7 @@ export function GetItineraryID(email, talkTime){
       .then((response) => response.json())
       .then((incomingData) => {
         setItineraryID(incomingData[talkTime]);
-        setSavedTalkStatus('fetched');
+        setItineraryIDStatus('fetched');
       })
       .catch((err) => console.error(err));
   }, [email, talkTime]);
@@ -247,5 +253,68 @@ export function GetItineraryID(email, talkTime){
     fetchData();
   }, [fetchData]);
 
-  return { savedTalkStatus, savedTalks};
+  return { itineraryIDStatus, itineraryID};
+}
+
+export function useCheckLogin(email, password) {
+  const [logInCheckStatus, setLogInCheckStatus] = useState("idle");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const hashedPassword = useMemo(
+    () => bcrypt.hashSync(password, "$2a$10$CwTycUXWue0Thq9StjUM0u"),
+    [password]
+  );
+
+  const fetchData = useCallback(() => {
+    setLoggedIn(false);
+    const url = `http://localhost:3001/account/login/email/${email}/password/${hashedPassword}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((incomingData) => {
+        setLoggedIn(incomingData);
+        setLogInCheckStatus("fetched");
+      })
+      .catch((err) => {
+        console.error(err);
+        setLogInCheckStatus("error");
+      });
+  }, [email, hashedPassword]);
+
+  useEffect(() => {
+    if (email && password) {
+      fetchData();
+    }
+  }, [fetchData, email, password]);
+  return { logInCheckStatus, loggedIn };
+}
+
+export function GetRemoveFromSaved(){
+  const RemoveFromSaved = useCallback((email,talkID) => {
+
+      const url = "http://localhost:3001/account/removeSavedID/email/" + email + "/id/" + talkID;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {RemoveFromSaved};
+}
+
+export function GetAddToSaved(){
+  const AddToSaved = useCallback((email,talkID) => {
+      console.log("Added: " + talkID);
+      const url = "http://localhost:3001/account/addSavedID/email/" + email + "/id/" + talkID;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {AddToSaved};
 }

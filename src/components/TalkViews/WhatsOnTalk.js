@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import GetTalksInfoBySess from "../DBController";
+import GetTalksInfoBySess, {GetAccountInfo, GetRemoveFromSaved, GetAddToSaved} from "../DBController";
 
 const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     
     const {status, TalksInfo} = GetTalksInfoBySess(sessionID);
-    
+    const [listofSavedIDs, setSavedList] = useState([]);
+    const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
+    useEffect(() => {
+        if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
+            setSavedList(accountInfo[0].saved); 
+        }
+    }, [accountInfoStatus, accountInfo, setSavedList]);
+    const RemoveFromSaved = GetRemoveFromSaved().RemoveFromSaved;
+    const AddToSaved = GetAddToSaved().AddToSaved;
 
     let TalkInfo = TalksInfo[row];
 
@@ -20,6 +28,34 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     const handleOpen = () => {
         setOpen(true);
     };
+
+    const HandleRemoveFromSaved = (TalkID) => {
+        RemoveFromSaved(loggedInEmail,TalkID);
+        setSavedList("");
+    };
+
+    const HandleAddToSaved = (TalkID) => {
+        AddToSaved(loggedInEmail,TalkID);
+        setSavedList((prevList) => [...prevList, TalkID])
+
+    };
+
+    const removeFromItinerary = (TalkID) => {
+
+    };
+
+    const addToItinerary = (TalkID) => {
+
+    };
+
+    function checkSaved(TalkID){
+        for (let x = 0; x < listofSavedIDs.length; x++){
+            if(TalkID === listofSavedIDs[x]){
+                return true;
+            }
+        }
+        return false;
+    }
 
     function getAverageRating(ratings){
         let avg = 0;
@@ -60,8 +96,13 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
                 </div>
                 <div class="talk-button-container">
                     <button type="button" onClick={handleOpen}>View Full Details</button>
-                    {loggedInEmail !== "" ? <button type="button" onClick={handleOpen}>Add to Saved</button> : null}
-                    {loggedInEmail !== "" ? <button type="button" onClick={handleOpen}>Add to Itinerary</button> : null}
+                    {loggedInEmail !== "" && !checkSaved(TalkInfo.id) ? <button type="button" onClick={() => HandleAddToSaved(TalkInfo.id)}>Add to Saved</button> 
+                    : loggedInEmail !== "" ? <button type="button" onClick={() => HandleRemoveFromSaved(TalkInfo.id)}>Remove from Saved</button> 
+                    : null}
+
+                    {loggedInEmail !== "" && !checkSaved(TalkInfo.id) ? <button type="button" onClick={() => addToItinerary(TalkInfo.id)}>Add to Itinerary</button> 
+                    : loggedInEmail !== "" ? <button type="button" onClick={() => removeFromItinerary(TalkInfo.id)}>Remove from Itinerary</button> 
+                    : null}
                     <PopUp isOpen={open} onClose={handleClose}>
                     <>
                         <h1>{TalkInfo.title}</h1>

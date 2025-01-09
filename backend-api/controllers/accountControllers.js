@@ -18,7 +18,7 @@ exports.createNewAccount = function (req, res) {
 
   exports.checkPassword = function (req, res) {
     let email = req.params["email"];
-    let pass = req.params["password"];
+    let pass = req.params["pass"];
     account
       .checkPassword(email, pass)
       .then((result) => {
@@ -53,6 +53,43 @@ exports.createNewAccount = function (req, res) {
       });
   };
 
+  exports.removeFromSaved = function (req, res) {
+    let talkId = req.params["id"];
+    let email = req.params["email"];
+  
+    account
+      .removeFromSaved(email, talkId)
+      .then((result) => {res.json(result)})
+      .catch((err) => {
+        res.json({"message":err});
+      });
+  };
+
+  exports.removeFromItinerary = function (req, res) {
+    let talkId = req.params["id"];
+    let email = req.params["email"];
+    let talkTime = req.params["time"];
+  
+    account
+      .removeFromItinerary(email, talkId, talkTime)
+      .then((result) => {res.json(result)})
+      .catch((err) => {
+        res.json({"message":err});
+      });
+  };
+
+  exports.addToItinerary = function (req, res) {
+    let talkId = req.params["id"];
+    let email = req.params["email"];
+    let talkTime = req.params["time"];
+    account
+      .addToItinerary(email, talkId, talkTime)
+      .then((result) => {res.json(result)})
+      .catch((err) => {
+        res.json({"message":err});
+      });
+  };
+
   exports.fetchItineraryID = function (req, res) {
     let email = req.params["email"];
     let talkTime = req.params["talkTime"];
@@ -61,19 +98,6 @@ exports.createNewAccount = function (req, res) {
       .then((result) => {
         res.json(result[0].itinerary[talkTime]);
       })
-      .catch((err) => {
-        res.json({"message":err});
-      });
-  };
-
-  exports.addToItinerary = function (req, res) {
-    let talkId = req.params["id"];
-    let talkTime = req.params["talkTime"];
-    let email = req.params["email"];
-  
-    account
-      .addToItinerary(email, talkId, talkTime)
-      .then((result) => {res.json(result)})
       .catch((err) => {
         res.json({"message":err});
       });

@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import { GetSavedIDs, GetTalkById } from "../DBController";
+import {GetTalkById, GetAccountInfo, GetRemoveFromSaved, GetAddToSaved} from "../DBController";
 import EmptyTalk from "./EmptyTalk";
 
-const SavedTalk = ({ TalkID  }) => {
-    // const [targetID,setTargetTalkID] = useState(null);
-    // const {savedTalkStatus, savedTalks} = GetSavedIDs("R@R.com");
-    // useEffect(() => {
-    //     if (savedTalkStatus === "fetched" && savedTalks.length > 0) {
-    //       setTargetTalkID(savedTalks[0].saved[row]); // Assuming saved[row] has the ID you want
-    //     }
-    //   }, [savedTalkStatus, savedTalks, row]);
-     const {talkStatus, Talk} = GetTalkById(TalkID);
-    console.log(Talk)
+const SavedTalk = ({ TalkID, loggedInEmail, setMasterSavedList}) => {
+    const {talkStatus, Talk} = GetTalkById(TalkID);
     const [open, setOpen] = useState(false);
+    const [listofSavedIDs, setSavedList] = useState([]);
+    const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
+    useEffect(() => {
+        if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
+            setSavedList(accountInfo[0].saved); 
+        }
+    }, [accountInfoStatus, accountInfo, setSavedList]);
+    const RemoveFromSaved = GetRemoveFromSaved().RemoveFromSaved;
+    const AddToSaved = GetAddToSaved().AddToSaved;
+    
 
     const handleClose = () => {
         setOpen(false);
@@ -24,6 +26,26 @@ const SavedTalk = ({ TalkID  }) => {
     const handleOpen = () => {
         setOpen(true);
     };
+
+    const HandleRemoveFromSaved = (TalkID) => {
+        RemoveFromSaved(loggedInEmail,TalkID);
+        setMasterSavedList((prevList) => prevList.filter((id) => id !== TalkID));
+    };
+
+    const HandleAddToSaved = (TalkID) => {
+        AddToSaved(loggedInEmail,TalkID);
+        setMasterSavedList((prevList) => [...prevList, TalkID]);
+
+    };
+
+    function checkSaved(TalkID){
+        for (let x = 0; x < listofSavedIDs.length; x++){
+            if(TalkID === listofSavedIDs[x]){
+                return true;
+            }
+        }
+        return false;
+    }
 
     function getAverageRating(ratings){
         let avg = 0;
@@ -54,17 +76,18 @@ const SavedTalk = ({ TalkID  }) => {
     if (talkStatus==='fetched'){
         let TalkInfo = Talk[0];
         return (
-                <div class="talk-container">
-                    <div class="time-container">
-                        <h3>{TalkInfo.time}</h3>
-                    </div>
+                <div class="talk-container saved">
                     <div class="talk-body-container">
                         <div class="talk-information-container">
                             <h2 class="talk-title">{TalkInfo.speaker + ": " + TalkInfo.title}</h2>
+                            <h2>Session {TalkInfo.session} - {TalkInfo.time}</h2>
                             <p class="talk-description-preview">{TalkInfo.description}</p>
                         </div>
-                        <div class="talk-button-container">
+                        <div class="talk-button-container saved">
                             <button type="button" onClick={handleOpen}>View Full Details</button>
+                            {loggedInEmail !== "" && !checkSaved(TalkInfo.id) ? <button type="button" onClick={() => HandleAddToSaved(TalkInfo.id)}>Add to Saved</button> 
+                            : loggedInEmail !== "" ? <button type="button" onClick={() => HandleRemoveFromSaved(TalkInfo.id)}>Remove from Saved</button> 
+                            : null}
                             <PopUp isOpen={open} onClose={handleClose}>
                             <>
                                 <h1>{TalkInfo.title}</h1>
@@ -87,7 +110,7 @@ const SavedTalk = ({ TalkID  }) => {
             );
         
     } else {
-        return(<EmptyTalk/>)}
+        return(<EmptyTalk type={1}/>)}
     };
 
 export default SavedTalk;

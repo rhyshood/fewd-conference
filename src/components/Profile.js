@@ -4,47 +4,57 @@ import AccountSettings from "./AccountSettings";
 import "./../styles/Profile.css";
 import "./../styles/Main.css";
 import SavedTalk from "./TalkViews/SavedTalk";
-import EmptyTalk from "./TalkViews/EmptyTalk";
-import { GetSavedIDs } from "./DBController";
+import ItineraryTalk from "./TalkViews/ItineraryTalk";
+import EmptyCollection from "./TalkViews/EmptyCollection";
+import { GetAccountInfo } from "./DBController";
 
-function Profile({loggedInEmail, setloggedInEmail}) {
-    const [listofSavedIDs, setSavedList] = useState([]);
-    const {savedTalkStatus, savedTalks} = GetSavedIDs("R@R.com");
+function Profile({loggedInEmail, setLoggedInEmail}) {
+    const [listofSavedIDs, setMasterSavedList] = useState([]);
+    const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
     useEffect(() => {
-        if (savedTalkStatus === "fetched" && savedTalks.length > 0) {
-            setSavedList(savedTalks[0].saved); // Assuming saved[row] has the ID you want
+        if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
+            setMasterSavedList(accountInfo[0].saved); 
         }
-      }, [savedTalkStatus, savedTalks, setSavedList]);
+      }, [accountInfoStatus, accountInfo, setMasterSavedList]);
 
       const [activePage, setActivePage] = useState(1);
-
     if (activePage === 1){
         return (
             <div class="profile-container">
-                <ProfileBar activePage={activePage} setActivePage={setActivePage} setloggedInEmail={setloggedInEmail}/>
+                <ProfileBar activePage={activePage} setActivePage={setActivePage} setLoggedInEmail={setLoggedInEmail}/>
                 <AccountSettings loggedInEmail={loggedInEmail}/>
             </div>
         );
     } else if (activePage === 2){
         return(
         <div class="profile-container">
-                <ProfileBar activePage={activePage} setActivePage={setActivePage}/>
+                <ProfileBar activePage={activePage} setActivePage={setActivePage} setLoggedInEmail={setLoggedInEmail}/>
                 <div class="main-container saved">
-                {savedTalkStatus === "fetched" ? listofSavedIDs.map((savedID, index) => (
-                <SavedTalk TalkID={savedID}/>
-            )) : null}
+                    <div class="saved-talk-container">
+                        {accountInfoStatus === "fetched" && listofSavedIDs.length >= 5 ? listofSavedIDs.map((savedID, index) => (
+                        <SavedTalk TalkID={savedID} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>)) 
+                        : accountInfoStatus === "fetched" && listofSavedIDs.length < 5 ? 
+                            <div class="saved-talk-container">
+                            <SavedTalk TalkID={listofSavedIDs[0]} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>
+                            <SavedTalk TalkID={listofSavedIDs[1]} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>
+                            <SavedTalk TalkID={listofSavedIDs[2]} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>
+                            <SavedTalk TalkID={listofSavedIDs[3]} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>
+                            <SavedTalk TalkID={listofSavedIDs[4]} loggedInEmail={loggedInEmail} setMasterSavedList={setMasterSavedList}/>
+                            </div>
+                        : <EmptyCollection type={1}/> }
+                    </div>
             </div>
         </div>)
     } else {
         return (
             <div class="profile-container">
-                <ProfileBar activePage={activePage} setActivePage={setActivePage}/>
+                <ProfileBar activePage={activePage} setActivePage={setActivePage} setLoggedInEmail={setLoggedInEmail}/>
                 <div class="main-container">
-                    <ItineraryTalk timeTalk={"9:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk timeTalk={"10:30"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk timeTalk={"12:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk timeTalk={"14:00"} loggedInEmail={loggedInEmail}/>
-                    <ItineraryTalk timeTalk={"15:30"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk talkTime={"9:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk talkTime={"10:30"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk talkTime={"12:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk talkTime={"14:00"} loggedInEmail={loggedInEmail}/>
+                    <ItineraryTalk talkTime={"15:30"} loggedInEmail={loggedInEmail}/>
                 </div>
             </div>
         );

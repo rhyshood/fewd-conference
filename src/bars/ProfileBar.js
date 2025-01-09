@@ -2,7 +2,7 @@ import React from "react";
 import './../styles/Main.css';
 import './../styles/Profile.css';
 
-function ProfileBar({activePage, setActivePage, setloggedInEmail}) {
+function ProfileBar({activePage, setActivePage, setLoggedInEmail}) {
     function changePage(evt, pageID) {
         clearActive();
         evt.currentTarget.className += " active";
@@ -34,6 +34,7 @@ function ProfileBar({activePage, setActivePage, setloggedInEmail}) {
                     <button class={checkActivePage(1)} onClick={(evt) => changePage(evt, 1)}>Account Settings</button>
                     <button class={checkActivePage(2)} onClick={(evt) => changePage(evt, 2)}>Saved Talks</button>
                     <button class={checkActivePage(3)} onClick={(evt) => changePage(evt, 3)}>My Itinerary</button>
+                    <button class={"profilelinks signout"} onClick={() => setLoggedInEmail("")}>Sign Out</button>
                 </div>
             <div class="Profile-padding bottom"/>
         </div>

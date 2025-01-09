@@ -22,12 +22,14 @@ router.get('/talks/tags', talkControllers.listAllTags)
 router.post('/talks/posts', talkControllers.handlePosts)
 
 //  Routes relating to Account
-router.get('/account/login/email/:email/pass/:pass', accountControllers.checkPassword)
+router.get('/account/login/email/:email/password/:pass', accountControllers.checkPassword)
 router.post('/account/create', accountControllers.createNewAccount)
 router.get('/account/savedID/email/:email', accountControllers.fetchSavedIDs)
 router.get('/account/addSavedID/email/:email/id/:id', accountControllers.addToSaved)
+router.get('/account/removeSavedID/email/:email/id/:id', accountControllers.removeFromSaved)
 router.get('/account/itinerary/email/:email/talkTime/:talkTime', accountControllers.fetchItineraryID)
-router.get('/account/addItinerary/email/:email/id/:id/talkTime/:id', accountControllers.addToItinerary)
+router.get('/account/addItinerary/email/:email/id/:id/talkTime/:time', accountControllers.addToItinerary)
+router.get('/account/removeItinerary/email/:email/id/:id/talkTime/:time', accountControllers.removeFromItinerary)
 
 router.use(function (req, res) {
   res.status(404);
