@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import GetTalksInfoBySess, {GetAccountInfo, GetRemoveFromSaved, GetAddToSaved, GetAddToItinerary, GetRemoveFromItinerary} from "../DBController";
+import GetTalksInfoBySess, {GetAccountInfo, GetRemoveFromSaved, GetAddToSaved, GetAddToItinerary, GetRemoveFromItinerary, GetUserRating, GetRateTalk} from "../DBController";
 
 const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     
@@ -10,12 +10,15 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     const [listofSavedIDs, setSavedList] = useState([]);
     const [listofItineraryIDs, setItineraryList] = useState({});
     const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
+    const [ratingChange, setRatingChange] = useState(false);
+    const [avgRating, setAvgRating] = useState(0);
     useEffect(() => {
         if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
             setSavedList(accountInfo[0].saved); 
             setItineraryList(accountInfo[0].itinerary);
         }
     }, [accountInfoStatus, accountInfo, setSavedList]);
+
     const [starStatus, setStarStatus] = useState({
         1:false,
         2:false,
@@ -27,8 +30,43 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
     const AddToSaved = GetAddToSaved().AddToSaved;
     const AddToItinerary = GetAddToItinerary().AddToItinerary;
     const RemoveFromItinerary = GetRemoveFromItinerary().RemoveFromItinerary;
-
+    const UserRating = GetUserRating().UserRating;
+    const RateTalk = GetRateTalk().RateTalk;
+    
     let TalkInfo = TalksInfo[row];
+
+    function HandleStarClick(starNo, isUpdate){
+        if(isUpdate){
+            setRatingChange(true);
+            RateTalk(accountInfo[0]._id,TalkInfo.id,starNo);
+        }
+        let body = [false,false,false,false,false]
+        for (let x=0;x<starNo;x++){
+            body[x] = true;
+        }
+        setStarStatus({
+            1:body[0],
+            2:body[1],
+            3:body[2],
+            4:body[3],
+            5:body[4]
+        })
+    }
+
+    useEffect(() => {
+        if(TalkInfo !== undefined && loggedInEmail !== ""){
+            HandleStarClick(UserRating(accountInfo[0]._id, TalkInfo.id), false);
+            setAvgRating(getAverageRating(TalkInfo.ratings))
+        }
+    }, [TalkInfo]);
+
+    useEffect(() => {
+        if(ratingChange){
+            setAvgRating(getAverageRating(TalkInfo.ratings))
+            setRatingChange(false)
+        }
+    }, [ratingChange]);
+
 
     const [open, setOpen] = useState(false);
 
@@ -80,31 +118,18 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
         return false;
     }
 
-    function HandleStarClick(starNo){
-        let body = [false,false,false,false,false]
-        for (let x=0;x<starNo;x++){
-            body[x] = true;
-        }
-        setStarStatus({
-            1:body[0],
-            2:body[1],
-            3:body[2],
-            4:body[3],
-            5:body[4]
-        })
-    }
-
-    function getAverageRating(ratings){
+    const getAverageRating = (ratings) => {
         let avg = 0;
-        if (ratings.length === 0){
+        if (Object.keys(ratings).length === 0){
             return 0;
         }
 
         for (const id of Object.keys(ratings)) {
+            console.log(ratings[id])
             avg = avg + ratings[id];
         }
 
-        avg = avg / ratings.length;
+        avg = avg / Object.keys(ratings).length;
 
         return avg.toFixed(2);
     }
@@ -147,7 +172,7 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
                         <h2>Session {TalkInfo.session} - {TalkInfo.time}</h2>
                         <div class="detailed-rating-score">
                             <img className="star-icon" src="/images/star.png" alt="star"></img>
-                            <h2 className="rating-score"> {getAverageRating(TalkInfo.ratings)}</h2>
+                            <h2 className="rating-score">{avgRating}</h2>
                         </div>
                         <div class="description-button-container">
                             <div class="detailed-description-container">
@@ -165,26 +190,27 @@ const WhatsOnTalk = ({ row, sessionID, loggedInEmail }) => {
                             : null}
                             </div>
                         </div>
+                        {loggedInEmail !== "" ?
                         <div class="user-rating-container">
                             <h4>Rate this Talk:</h4>
                             <div class="star-rating-container">
-                                {starStatus[1] ? <img className="star-icon" onClick={(() => HandleStarClick(1))} src="/images/star_rating_full.png" alt="star"></img> 
-                                : <img className="star-icon" onClick={(() => HandleStarClick(1))} src="/images/star_rating_empty.png" alt="star"></img> }
+                                {starStatus[1] ? <img className="star-icon" onClick={(() => HandleStarClick(1, true))} src="/images/star_rating_full.png" alt="star"></img> 
+                                : <img className="star-icon" onClick={(() => HandleStarClick(1, true))} src="/images/star_rating_empty.png" alt="star"></img> }
 
-                                {starStatus[2] ? <img className="star-icon" onClick={(() => HandleStarClick(2))} src="/images/star_rating_full.png" alt="star"></img> 
-                                : <img className="star-icon" onClick={(() => HandleStarClick(2))} src="/images/star_rating_empty.png" alt="star"></img>}
+                                {starStatus[2] ? <img className="star-icon" onClick={(() => HandleStarClick(2, true))} src="/images/star_rating_full.png" alt="star"></img> 
+                                : <img className="star-icon" onClick={(() => HandleStarClick(2, true))} src="/images/star_rating_empty.png" alt="star"></img>}
 
-                                {starStatus[3] ? <img className="star-icon" onClick={(() => HandleStarClick(3))} src="/images/star_rating_full.png" alt="star"></img> 
-                                : <img className="star-icon" onClick={(() => HandleStarClick(3))} src="/images/star_rating_empty.png" alt="star"></img>}
+                                {starStatus[3] ? <img className="star-icon" onClick={(() => HandleStarClick(3, true))} src="/images/star_rating_full.png" alt="star"></img> 
+                                : <img className="star-icon" onClick={(() => HandleStarClick(3, true))} src="/images/star_rating_empty.png" alt="star"></img>}
 
-                                {starStatus[4] ? <img className="star-icon" onClick={(() => HandleStarClick(4))} src="/images/star_rating_full.png" alt="star"></img> 
-                                : <img className="star-icon" onClick={(() => HandleStarClick(4))} src="/images/star_rating_empty.png" alt="star"></img>}
+                                {starStatus[4] ? <img className="star-icon" onClick={(() => HandleStarClick(4, true))} src="/images/star_rating_full.png" alt="star"></img> 
+                                : <img className="star-icon" onClick={(() => HandleStarClick(4, true))} src="/images/star_rating_empty.png" alt="star"></img>}
 
-                                {starStatus[5] ? <img className="star-icon" onClick={(() => HandleStarClick(5))} src="/images/star_rating_full.png" alt="star"></img> 
-                                : <img className="star-icon" onClick={(() => HandleStarClick(5))} src="/images/star_rating_empty.png" alt="star"></img>}
+                                {starStatus[5] ? <img className="star-icon" onClick={(() => HandleStarClick(5, true))} src="/images/star_rating_full.png" alt="star"></img> 
+                                : <img className="star-icon" onClick={(() => HandleStarClick(5, true))} src="/images/star_rating_empty.png" alt="star"></img>}
 
                             </div>
-                        </div>
+                        </div> : null }
                         <p class="detailed-tag-list">Tags: {getListOfTags(TalkInfo.tags)}</p>
                     </>
                     </PopUp>

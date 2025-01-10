@@ -328,13 +328,13 @@ class Conf {
 
   getAvg(arr){
     let result = 0
-    if (arr.length === 0){
+    if (Object.keys(arr).length === 0){
       return 0;
     }
-    for(let x=0;x<arr.length;x++){
-      result += arr[x];
+    for (const id of Object.keys(arr)) {
+      result += arr[id];
     }
-    return result/arr.length;
+    return result/Object.keys(arr).length;
   }
 
   filterRatingSearch(arr, target){
@@ -434,14 +434,13 @@ class Conf {
     });
   }
 
-  getTalkRatingById(id,newRating, email){
-    let rating=Number(newRating)
+  getTalkRatingById(id, email){
       return new Promise((resolve, reject) => {
         this.conf.find({id:id}, function (err, entries) {
         if (err) {
           reject(err);
         } else {
-           resolve(entries.ratings[email]);
+           resolve(entries[0].ratings[email]);
         }
       });
     });

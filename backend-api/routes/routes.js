@@ -17,6 +17,7 @@ router.get('/talks/id/:id/', talkControllers.getTalkById);
 router.get('/talks/:id/ratingById', talkControllers.listRatingsById);
 router.get('/talks/speaker/:speaker/session/:session/times/:times/tags/:tags/rating/:rating', talkControllers.listSearchQuery);
 router.get('/talks/rate/:id/:rating/:email', talkControllers.rateTalkById)
+router.get('/talks/getRate/:id/:email', talkControllers.getTalkRatingById)
 router.get('/talks/speakers', talkControllers.listAllSpeakers)
 router.get('/talks/tags', talkControllers.listAllTags)
 router.post('/talks/posts', talkControllers.handlePosts)

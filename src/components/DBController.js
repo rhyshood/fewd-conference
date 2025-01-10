@@ -66,6 +66,7 @@ export function GetSearchResults(searchParameters){
 
 const fetchData = useCallback(() => {
   const url = "http://localhost:3001/" + searchParameters;
+  console.log("fdd" + url)
   fetch(url)
     .then((response) => response.json())
     .then((incomingData) => {
@@ -335,8 +336,8 @@ export function GetAddToItinerary(){
 
 export function GetRateTalk(){
   const RateTalk = useCallback((email,talkID, rating) => {
-      const url = "http://localhost:3001/talks/rate/" + talkID + "/" + rating + "/" + bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u");;
-
+      const url = "http://localhost:3001/talks/rate/" + talkID + "/" + rating + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
+      console.log(url)
       fetch(url)
         .then((response) => response.json())
         .then(() => {
@@ -349,14 +350,28 @@ export function GetRateTalk(){
 
 export function GetUserRating(){
   const UserRating = useCallback((email,talkID) => {
-      const url = "http://localhost:3001/talks/getRate/" + talkID + "/" + bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u");;
+      const url = "http://localhost:3001/talks/getRate/" + talkID + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
 
       fetch(url)
         .then((response) => response.json())
-        .then(() => {
-          return 'fetched';
+        .then((incomingData) => {
+          return incomingData;
         })
         .catch((err) => console.error(err));
   }, []);
   return {UserRating};
+}
+
+export function GetTalkRating(){
+  const TalkRating = useCallback((email,talkID) => {
+      const url = "http://localhost:3001/talks/" + talkID + "/ratingById";
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((incomingData) => {
+          return incomingData;
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {TalkRating};
 }
