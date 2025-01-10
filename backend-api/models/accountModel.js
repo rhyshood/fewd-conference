@@ -20,6 +20,7 @@ class Account {
               if (err) {
                 reject(err);
               } else {
+                console.log(entry)
                 if(entry[0].password === pass){
                     resolve(true);
                 }
@@ -119,6 +120,7 @@ class Account {
     }
 
     async addToItinerary(email,talkId,talkTime){
+            console.log(email)
             console.log(talkTime);
           return new Promise((resolve, reject) => {
               this.account.update({emailAddress:email},{$set:{[`itinerary.${talkTime}`]:talkId}}, function (err, entries) {
@@ -131,10 +133,11 @@ class Account {
         });
       }
 
-      async removeFromItinerary(email,talkId,talkTime){
+      async removeFromItinerary(email,talkTime){
+        
         console.log(talkTime);
       return new Promise((resolve, reject) => {
-          this.account.update({emailAddress:email},{$pull:{[`itinerary.${talkTime}`]:talkId}}, function (err, entries) {
+          this.account.update({emailAddress:email},{$set:{[`itinerary.${talkTime}`]:""}}, function (err, entries) {
           if (err) {
             reject(err);
           } else {

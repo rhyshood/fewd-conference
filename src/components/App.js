@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/whatson" />} />
         <Route path="/whatson" element={<WhatsOn loggedInEmail={loggedInEmail}/>} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/search" element={<Search loggedInEmail={loggedInEmail}/>} />
         <Route path="login" element= {loggedInEmail !== "" ? <Navigate to="/profile" /> : <Login setLoggedInEmail={setLoggedInEmail}/>} />
         <Route path="profile" element= {loggedInEmail === "" ? <Navigate to="/login" /> : <Profile loggedInEmail={loggedInEmail} setLoggedInEmail={setLoggedInEmail}/>} />
         <Route path="contact" element= {<Contact/>} />

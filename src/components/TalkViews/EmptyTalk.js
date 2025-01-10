@@ -2,14 +2,19 @@ import React from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 
-const EmptyTalk = ({type}) => {
+const EmptyTalk = ({type, Time}) => {
     
     return (
         <div class="talk-container">
-            {type !== 1?
+            {type !== 1 && Time !== null?
             <div class="time-container">
-                <h3> </h3>
-            </div>:null}
+                <h3>{Time}</h3>
+            </div>
+            :type !== 1 ?
+            <div class="time-container">
+                <h3></h3>
+            </div>
+            :null}
             <div class="talk-body-container">
                 <div class="talk-information-container">
                     <h2 class="talk-title"> </h2>

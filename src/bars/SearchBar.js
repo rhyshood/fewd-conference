@@ -52,7 +52,7 @@ function SessionBar({searchParameters, setSearchParameters}) {
 
     function updateSearchParameters(){
         let timeStmt = prepareTimeStatement();
-        let newSearchParameters = "/talks" 
+        let newSearchParameters = "talks" 
         + "/speaker/" + selectedSpeaker
         + "/session/" + selectedSession
         + "/times/" + timeStmt 

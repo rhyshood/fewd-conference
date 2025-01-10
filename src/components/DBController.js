@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import bcrypt from 'bcryptjs';
 
 function formatTime(time){
@@ -65,7 +65,7 @@ export function GetSearchResults(searchParameters){
     }]);
 
 const fetchData = useCallback(() => {
-  const url = "http://localhost:3001" + searchParameters;
+  const url = "http://localhost:3001/" + searchParameters;
   fetch(url)
     .then((response) => response.json())
     .then((incomingData) => {
@@ -191,13 +191,13 @@ export function GetTalkById(TalkID){
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  
   return { talkStatus, Talk};
 }
 
 export function GetAccountInfo(email){
   const [accountInfoStatus, setAccountInfoStatus] = useState('idle');
   const [accountInfo, setAccountInfo]=useState([{
-    firstName: "",
     firstName: "",
     emailAddress: "",
     password: "",
@@ -254,37 +254,26 @@ export function GetItineraryID(email){
   return { itineraryIDStatus, itineraryIDs};
 }
 
-export function useCheckLogin(email, password) {
-  const [logInCheckStatus, setLogInCheckStatus] = useState("idle");
-  const [loggedIn, setLoggedIn] = useState(false);
+export function useCheckLogin() {
+  const CheckLogin = useCallback((email,password) => {
+    let logInCheckStatus= "idle";
+    let loggedIn = false;
+    let pass = bcrypt.hashSync(password, "$2a$10$CwTycUXWue0Thq9StjUM0u");
+      const url = "http://localhost:3001/account/login/email/" + email + "/password/" + pass;
 
-  const hashedPassword = useMemo(
-    () => bcrypt.hashSync(password, "$2a$10$CwTycUXWue0Thq9StjUM0u"),
-    [password]
-  );
-
-  const fetchData = useCallback(() => {
-    setLoggedIn(false);
-    const url = `http://localhost:3001/account/login/email/${email}/password/${hashedPassword}`;
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((incomingData) => {
-        setLoggedIn(incomingData);
-        setLogInCheckStatus("fetched");
-      })
-      .catch((err) => {
-        console.error(err);
-        setLogInCheckStatus("error");
-      });
-  }, [email, hashedPassword]);
-
-  useEffect(() => {
-    if (email && password) {
-      fetchData();
-    }
-  }, [fetchData, email, password]);
-  return { logInCheckStatus, loggedIn };
+      fetch(url)
+        .then((response) => response.json())
+        .then((incomingData) => {
+          loggedIn=incomingData;
+          logInCheckStatus="fetched";
+        })
+        .catch((err) => {
+          console.error(err);
+          logInCheckStatus="error";
+        });
+        return { loggedIn };
+  }, []);
+  return { CheckLogin };
 }
 
 export function GetRemoveFromSaved(){
@@ -304,7 +293,6 @@ export function GetRemoveFromSaved(){
 
 export function GetAddToSaved(){
   const AddToSaved = useCallback((email,talkID) => {
-      console.log("Added: " + talkID);
       const url = "http://localhost:3001/account/addSavedID/email/" + email + "/id/" + talkID;
 
       fetch(url)
@@ -315,4 +303,60 @@ export function GetAddToSaved(){
         .catch((err) => console.error(err));
   }, []);
   return {AddToSaved};
+}
+
+export function GetRemoveFromItinerary(){
+  const RemoveFromItinerary = useCallback((email,talkID, talkTime) => {
+
+      const url = "http://localhost:3001/account/removeItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {RemoveFromItinerary};
+}
+
+export function GetAddToItinerary(){
+  const AddToItinerary = useCallback((email,talkID, talkTime) => {
+      const url = "http://localhost:3001/account/addItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {AddToItinerary};
+}
+
+export function GetRateTalk(){
+  const RateTalk = useCallback((email,talkID, rating) => {
+      const url = "http://localhost:3001/talks/rate/" + talkID + "/" + rating + "/" + bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u");;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {RateTalk};
+}
+
+export function GetUserRating(){
+  const UserRating = useCallback((email,talkID) => {
+      const url = "http://localhost:3001/talks/getRate/" + talkID + "/" + bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u");;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then(() => {
+          return 'fetched';
+        })
+        .catch((err) => console.error(err));
+  }, []);
+  return {UserRating};
 }

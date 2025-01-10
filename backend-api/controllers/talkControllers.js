@@ -139,9 +139,10 @@ exports.getTalkById = function (req, res) {
 exports.rateTalkById = function (req, res) {
   let talkId = req.params["id"];
   let newRating = req.params["rating"];
+  let email = req.params["email"];
 
   conf
-    .rateTalkById(talkId, newRating)
+    .rateTalkById(talkId, newRating, email)
     .then(console.log("adding rating using params"))
     .catch((err) => {
       console.log("promise rejected", err);

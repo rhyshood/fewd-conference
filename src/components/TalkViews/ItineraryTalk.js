@@ -2,13 +2,27 @@ import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import { GetTalkById } from "../DBController";
+import { GetTalkById, GetAccountInfo, GetRemoveFromSaved, GetAddToSaved, GetRemoveFromItinerary } from "../DBController";
 import EmptyTalk from "./EmptyTalk";
 
-const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
-    const {talkStatus, Talk} = GetTalkById(TalkID);
-    console.log(Talk)
+const ItineraryTalk = ({ Time, loggedInEmail,  listofSavedIDs, setMasterSavedList}) => {
     const [open, setOpen] = useState(false);
+    const [listofItineraryIDs, setItineraryList] = useState({});
+    const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
+    useEffect(() => {
+        if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
+            setMasterSavedList(accountInfo[0].saved); 
+            setItineraryList(accountInfo[0].itinerary);
+        }
+    }, [accountInfoStatus, accountInfo]);
+    const {talkStatus, Talk} = GetTalkById(listofItineraryIDs[Time]);
+    const RemoveFromSaved = GetRemoveFromSaved().RemoveFromSaved;
+    const RemoveFromItinerary = GetRemoveFromItinerary().RemoveFromItinerary;
+    const AddToSaved = GetAddToSaved().AddToSaved;
+
+    if(listofItineraryIDs[Time] === ""){
+        return(<EmptyTalk Time={Time}/>)
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -18,14 +32,38 @@ const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
         setOpen(true);
     };
 
+    const HandleRemoveFromSaved = (TalkID) => {
+        RemoveFromSaved(loggedInEmail,TalkID);
+        setMasterSavedList((prevList) => prevList.filter((id) => id !== TalkID));
+    };
+
+    const HandleAddToSaved = (TalkID) => {
+        AddToSaved(loggedInEmail,TalkID);
+        setMasterSavedList((prevList) => [...prevList, TalkID]);
+    };
+
+    const removeFromItinerary = (TalkID, talkTime) => {
+        RemoveFromItinerary(loggedInEmail,TalkID, talkTime);
+        setItineraryList((prevList) => ({ ...prevList, [talkTime]: "" }));
+    };
+
+    function checkSaved(TalkID){
+        for (let x = 0; x < listofSavedIDs.length; x++){
+            if(TalkID === listofSavedIDs[x]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     function getAverageRating(ratings){
         let avg = 0;
         if (ratings.length === 0){
             return 0;
         }
 
-        for (let x = 0; x < ratings.length; x++){
-            avg = avg + ratings[x];
+        for (const id of Object.keys(ratings)) {
+            avg = avg + ratings[id];
         }
 
         avg = avg / ratings.length;
@@ -43,8 +81,8 @@ const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
 
         return str;
     }
-
-    if (talkStatus==='fetched'){
+    console.log(Talk)
+    if (accountInfoStatus === "fetched"){
         let TalkInfo = Talk[0];
         return (
                 <div class="talk-container">
@@ -58,6 +96,11 @@ const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
                         </div>
                         <div class="talk-button-container">
                             <button type="button" onClick={handleOpen}>View Full Details</button>
+                            {loggedInEmail !== "" && !checkSaved(TalkInfo.id) ? <button type="button" onClick={() => HandleAddToSaved(TalkInfo.id)}>Add to Saved</button> 
+                            : loggedInEmail !== "" ? <button type="button" onClick={() => HandleRemoveFromSaved(TalkInfo.id)}>Remove from Saved</button> 
+                            : null}
+
+                            <button type="button" onClick={() => removeFromItinerary(TalkInfo.id, TalkInfo.time)}>Remove from Itinerary</button>
                             <PopUp isOpen={open} onClose={handleClose}>
                             <>
                                 <h1>{TalkInfo.title}</h1>
@@ -80,7 +123,7 @@ const ItineraryTalk = ({ TalkID, loggedInEmail  }) => {
             );
         
     } else {
-        return(<EmptyTalk/>)}
+        return(<EmptyTalk Time={Time}/>)}
     };
 
 export default ItineraryTalk;

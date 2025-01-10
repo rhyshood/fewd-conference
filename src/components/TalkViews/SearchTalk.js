@@ -1,14 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './../../styles/Main.css';
 import './../../styles/Talk.css';
 import PopUp from "../PopUp";
-import { GetSearchResults } from "../DBController";
+import { GetSearchResults, GetAccountInfo, GetRemoveFromSaved, GetAddToSaved, GetAddToItinerary, GetRemoveFromItinerary } from "../DBController";
 import EmptyTalk from "./EmptyTalk";
 
-const SearchTalk = ({ row, searchParameters  }) => {
+const SearchTalk = ({ row, searchParameters, loggedInEmail  }) => {
     
     const {searchStatus, searchedTalksInfo} = GetSearchResults(searchParameters);
     const [open, setOpen] = useState(false);
+    const [listofSavedIDs, setSavedList] = useState([]);
+    const [listofItineraryIDs, setItineraryList] = useState({});
+    const {accountInfoStatus, accountInfo} = GetAccountInfo(loggedInEmail);
+    useEffect(() => {
+        if (accountInfoStatus === "fetched" && accountInfo.length > 0) {
+            setSavedList(accountInfo[0].saved); 
+            setItineraryList(accountInfo[0].itinerary);
+        }
+    }, [accountInfoStatus, accountInfo, setSavedList]);
+    const RemoveFromSaved = GetRemoveFromSaved().RemoveFromSaved;
+    const AddToSaved = GetAddToSaved().AddToSaved;
+    const AddToItinerary = GetAddToItinerary().AddToItinerary;
+    const RemoveFromItinerary = GetRemoveFromItinerary().RemoveFromItinerary;
 
     const handleClose = () => {
         setOpen(false);
@@ -18,14 +31,56 @@ const SearchTalk = ({ row, searchParameters  }) => {
         setOpen(true);
     };
 
+    const HandleRemoveFromSaved = (TalkID) => {
+        RemoveFromSaved(loggedInEmail,TalkID);
+        setSavedList((prevList) => prevList.filter((id) => id !== TalkID));
+    };
+
+    const HandleAddToSaved = (TalkID) => {
+        AddToSaved(loggedInEmail,TalkID);
+        setSavedList((prevList) => [...prevList, TalkID])
+
+    };
+
+    const HandleAddToItinerary = (TalkID, talkTime) => {
+        console.log(loggedInEmail)
+        AddToItinerary(loggedInEmail,TalkID, talkTime);
+        setItineraryList((prevList) => ({ ...prevList, [talkTime]: TalkID }));
+    };
+
+    const HandleRemoveFromItinerary = (TalkID, talkTime) => {
+        RemoveFromItinerary(loggedInEmail,TalkID, talkTime);
+        setItineraryList((prevList) => ({ ...prevList, [talkTime]: "" }));
+    };
+
+    function checkItinerary(TalkID){
+        for (const time of Object.keys(listofItineraryIDs)) {
+            console.log(time)
+            if (listofItineraryIDs[`${time}`] === TalkID && time !== "undefined"){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    function checkSaved(TalkID){
+        for (let x = 0; x < listofSavedIDs.length; x++){
+            if(TalkID === listofSavedIDs[x]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     function getAverageRating(ratings){
         let avg = 0;
         if (ratings.length === 0){
             return 0;
         }
 
-        for (let x = 0; x < ratings.length; x++){
-            avg = avg + ratings[x];
+        for (const id of Object.keys(ratings)) {
+            avg = avg + ratings[id];
         }
 
         avg = avg / ratings.length;
@@ -63,6 +118,13 @@ const SearchTalk = ({ row, searchParameters  }) => {
                         </div>
                         <div class="talk-button-container">
                             <button type="button" onClick={handleOpen}>View Full Details</button>
+                            {loggedInEmail !== "" && !checkSaved(TalkInfo.id) ? <button type="button" onClick={() => HandleAddToSaved(TalkInfo.id)}>Add to Saved</button> 
+                            : loggedInEmail !== "" ? <button type="button" onClick={() => HandleRemoveFromSaved(TalkInfo.id)}>Remove from Saved</button> 
+                            : null}
+
+                            {loggedInEmail !== "" && !checkItinerary(TalkInfo.id) && listofItineraryIDs[TalkInfo.time] === ""? <button type="button" onClick={() => HandleAddToItinerary(TalkInfo.id, TalkInfo.time)}>Add to Itinerary</button> 
+                            : loggedInEmail !== "" && listofItineraryIDs[TalkInfo.time] === TalkInfo.id ? <button type="button" onClick={() => HandleRemoveFromItinerary(TalkInfo.id, TalkInfo.time)}>Remove from Itinerary</button> 
+                            : null}
                             <PopUp isOpen={open} onClose={handleClose}>
                             <>
                                 <h1>{TalkInfo.title}</h1>
