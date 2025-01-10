@@ -34,7 +34,7 @@ export default function GetTalksInfoBySess(sessionID){
       }]);
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/talks/session/" + sessionID;
+    const url = "http://13.42.12.54:3001/talks/session/" + sessionID;
     fetch(url)
       .then((response) => response.json())
       .then((incomingData) => {
@@ -65,7 +65,7 @@ export function GetSearchResults(searchParameters){
     }]);
 
 const fetchData = useCallback(() => {
-  const url = "http://localhost:3001/" + searchParameters;
+  const url = "http://13.42.12.54:3001/" + searchParameters;
   console.log("fdd" + url)
   fetch(url)
     .then((response) => response.json())
@@ -89,7 +89,7 @@ export function GetAllSpeakers(){
   const [speakers, setSpeakers]=useState([]);
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/talks/speakers";
+    const url = "http://13.42.12.54:3001/talks/speakers";
 
     fetch(url)
       .then((response) => response.json())
@@ -111,7 +111,7 @@ export function GetAllTags(){
   const [tags, setTags]=useState([]);
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/talks/tags";
+    const url = "http://13.42.12.54:3001/talks/tags";
 
     fetch(url)
       .then((response) => response.json())
@@ -132,7 +132,7 @@ export function GetCreateAccount(){
   const createAccount = useCallback(async (fName, lName, email, password) => {
     let createStatus = "idle";
     let res = {};
-    const url = "http://localhost:3001/account/create";
+    const url = "http://13.42.12.54:3001/account/create";
     const requestBody = {
       fName: fName,
       lName: lName,
@@ -177,7 +177,7 @@ export function GetTalkById(TalkID){
   }]);
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/talks/id/" + TalkID;
+    const url = "http://13.42.12.54:3001/talks/id/" + TalkID;
     fetch(url)
       .then((response) => response.json())
       .then((incomingData) => {
@@ -214,7 +214,7 @@ export function GetAccountInfo(email){
   }]);
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/account/savedID/email/" + email;
+    const url = "http://13.42.12.54:3001/account/savedID/email/" + email;
 
     fetch(url)
       .then((response) => response.json())
@@ -237,7 +237,7 @@ export function GetItineraryID(email){
   const [itineraryIDs, setItineraryIDs]=useState({});
 
   const fetchData = useCallback(() => {
-    const url = "http://localhost:3001/account/itinerary/email/" + email;
+    const url = "http://13.42.12.54:3001/account/itinerary/email/" + email;
 
     fetch(url)
       .then((response) => response.json())
@@ -260,7 +260,7 @@ export function useCheckLogin() {
     let logInCheckStatus= "idle";
     let loggedIn = false;
     let pass = bcrypt.hashSync(password, "$2a$10$CwTycUXWue0Thq9StjUM0u");
-      const url = "http://localhost:3001/account/login/email/" + email + "/password/" + pass;
+      const url = "http://13.42.12.54:3001/account/login/email/" + email + "/password/" + pass;
 
       fetch(url)
         .then((response) => response.json())
@@ -280,7 +280,7 @@ export function useCheckLogin() {
 export function GetRemoveFromSaved(){
   const RemoveFromSaved = useCallback((email,talkID) => {
 
-      const url = "http://localhost:3001/account/removeSavedID/email/" + email + "/id/" + talkID;
+      const url = "http://13.42.12.54:3001/account/removeSavedID/email/" + email + "/id/" + talkID;
 
       fetch(url)
         .then((response) => response.json())
@@ -294,7 +294,7 @@ export function GetRemoveFromSaved(){
 
 export function GetAddToSaved(){
   const AddToSaved = useCallback((email,talkID) => {
-      const url = "http://localhost:3001/account/addSavedID/email/" + email + "/id/" + talkID;
+      const url = "http://13.42.12.54:3001/account/addSavedID/email/" + email + "/id/" + talkID;
 
       fetch(url)
         .then((response) => response.json())
@@ -309,7 +309,7 @@ export function GetAddToSaved(){
 export function GetRemoveFromItinerary(){
   const RemoveFromItinerary = useCallback((email,talkID, talkTime) => {
 
-      const url = "http://localhost:3001/account/removeItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
+      const url = "http://13.42.12.54:3001/account/removeItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
       fetch(url)
         .then((response) => response.json())
         .then(() => {
@@ -322,7 +322,7 @@ export function GetRemoveFromItinerary(){
 
 export function GetAddToItinerary(){
   const AddToItinerary = useCallback((email,talkID, talkTime) => {
-      const url = "http://localhost:3001/account/addItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
+      const url = "http://13.42.12.54:3001/account/addItinerary/email/" + email + "/id/" + talkID + "/talkTime/" + talkTime;
 
       fetch(url)
         .then((response) => response.json())
@@ -336,7 +336,7 @@ export function GetAddToItinerary(){
 
 export function GetRateTalk(){
   const RateTalk = useCallback((email,talkID, rating) => {
-      const url = "http://localhost:3001/talks/rate/" + talkID + "/" + rating + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
+      const url = "http://13.42.12.54:3001/talks/rate/" + talkID + "/" + rating + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
       console.log(url)
       fetch(url)
         .then((response) => response.json())
@@ -350,7 +350,7 @@ export function GetRateTalk(){
 
 export function GetUserRating(){
   const UserRating = useCallback((email,talkID) => {
-      const url = "http://localhost:3001/talks/getRate/" + talkID + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
+      const url = "http://13.42.12.54:3001/talks/getRate/" + talkID + "/" + encodeURIComponent(JSON.stringify(bcrypt.hashSync(email, "$2a$10$CwTycUXWue0Thq9StjUM0u")));;
 
       fetch(url)
         .then((response) => response.json())
@@ -364,7 +364,7 @@ export function GetUserRating(){
 
 export function GetTalkRating(){
   const TalkRating = useCallback((email,talkID) => {
-      const url = "http://localhost:3001/talks/" + talkID + "/ratingById";
+      const url = "http://13.42.12.54:3001/talks/" + talkID + "/ratingById";
 
       fetch(url)
         .then((response) => response.json())
