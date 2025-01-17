@@ -20,7 +20,7 @@ class Conf {
       "session": "A", 
       "time": "9:00",
       "tags": ["patterns", "archtecture"],
-      "ratings": []
+      "ratings": {}
     });
     this.conf.insert({
       "id": "2",
@@ -30,7 +30,7 @@ class Conf {
       "session": "A",
       "time": "10:30", 
       "tags": ["javascript", "es6"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "3",
@@ -40,7 +40,7 @@ class Conf {
       "session": "A",
       "time": "12:00", 
       "tags": ["full-stack", "continuous delivery"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "4",
@@ -50,7 +50,7 @@ class Conf {
       "session": "A",
       "time": "14:00",
       "tags": ["javascript", "frameworks", "react"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "5",
@@ -60,7 +60,7 @@ class Conf {
       "session": "A",
       "time": "15:30",
       "tags": ["javascript", "es6"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "6",
@@ -70,7 +70,7 @@ class Conf {
       "session": "B",
       "time": "9:00", 
       "tags": ["javascript", "frameworks", "angular"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "7",
@@ -80,7 +80,7 @@ class Conf {
       "session": "B",
       "time": "10:30", 
       "tags": ["frameworks", "react", "full-stack"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "8",
@@ -90,7 +90,7 @@ class Conf {
       "session": "B",
       "time": "12:00", 
       "tags": ["node"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "9",
@@ -100,7 +100,7 @@ class Conf {
       "session": "B",
       "time": "14:00",
       "tags": ["real-time", "webrtc"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "10",
@@ -110,7 +110,7 @@ class Conf {
       "session": "B",
       "time": "15:30",
       "tags": ["real-time", "socket.io"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({  "id": "11",
       "speaker": "Alex Libby", 
@@ -119,7 +119,7 @@ class Conf {
       "session": "C",
       "time": "9:00",
       "tags": ["CSS","Sass"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "12",
@@ -129,7 +129,7 @@ class Conf {
       "session": "C",
       "time": "10:30", 
       "tags": ["CSS","HTML5"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "13",
@@ -139,7 +139,7 @@ class Conf {
       "session": "C",
       "time": "12:00", 
       "tags": ["CSS","HTML5"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "14",
@@ -149,7 +149,7 @@ class Conf {
       "session": "C",
       "time": "14:00",
       "tags": ["unit testing", "mocha"],
-      "ratings" :[]
+      "ratings" :{}
     });
     this.conf.insert({
       "id": "15",
@@ -159,7 +159,7 @@ class Conf {
       "session": "C",
       "time": "15:30",
       "tags": ["CORS", "security"],
-      "ratings" :[]
+      "ratings" :{}
     });
   }
 
@@ -328,13 +328,13 @@ class Conf {
 
   getAvg(arr){
     let result = 0
-    if (arr.length === 0){
+    if (Object.keys(arr).length === 0){
       return 0;
     }
-    for(let x=0;x<arr.length;x++){
-      result += arr[x];
+    for (const id of Object.keys(arr)) {
+      result += arr[id];
     }
-    return result/arr.length;
+    return result/Object.keys(arr).length;
   }
 
   filterRatingSearch(arr, target){
@@ -421,10 +421,10 @@ class Conf {
     });
    }
 
-  rateTalkById(id,newRating){
+  rateTalkById(id,newRating, email){
     let rating=Number(newRating)
       return new Promise((resolve, reject) => {
-        this.conf.update({id:id},{$push:{'ratings':rating}} , function (err, entries) {
+        this.conf.update({id:id},{$set:{[`ratings.${email}`]:rating}} , function (err, entries) {
         if (err) {
           reject(err);
         } else {
@@ -434,16 +434,13 @@ class Conf {
     });
   }
 
-  rateTalk(talkId,newRating){
-    let id=String(talkId)
-    let rating=Number(newRating)
-    console.log( id, rating)
+  getTalkRatingById(id, email){
       return new Promise((resolve, reject) => {
-        this.conf.update({id:id},{$push:{'ratings':rating}} , function (err, entries) {
+        this.conf.find({id:id}, function (err, entries) {
         if (err) {
           reject(err);
         } else {
-           resolve(entries);
+           resolve(entries[0].ratings[email]);
         }
       });
     });

@@ -116,8 +116,12 @@ exports.listRatingsById = function (req, res) {
   conf
     .getTalkById(talkId)
     .then((list) => {
-      res.json(list[0].ratings);
-      console.log("ratings: ", list[0].ratings);
+      console.log(list)
+      let arr = [];
+      for (const id of Object.keys(list[0].ratings)) {
+        arr.push(list[0].ratings[id])
+      }
+      res.json(arr)
     })
     .catch((err) => {
       console.log("promise rejected", err);
@@ -139,10 +143,23 @@ exports.getTalkById = function (req, res) {
 exports.rateTalkById = function (req, res) {
   let talkId = req.params["id"];
   let newRating = req.params["rating"];
+  let email = req.params["email"];
 
   conf
-    .rateTalkById(talkId, newRating)
+    .rateTalkById(talkId, newRating, email)
     .then(console.log("adding rating using params"))
+    .catch((err) => {
+      console.log("promise rejected", err);
+    });
+};
+
+exports.getTalkRatingById = function (req, res) {
+  let talkId = req.params["id"];
+  let email = req.params["email"];
+
+  conf
+    .getTalkRatingById(talkId, email)
+    .then((result) => res.json(result))
     .catch((err) => {
       console.log("promise rejected", err);
     });

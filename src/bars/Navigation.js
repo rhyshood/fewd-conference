@@ -28,18 +28,6 @@ function Navigation({loggedInEmail}) {
         evt.currentTarget.className += " active";
     }
 
-    function checkIfLoggedIn(){
-        if (loggedInEmail !== "") {
-            return (
-                <Link to="profile"><button class={CheckLocation("profile")} onClick={(evt) => changePage(evt)}>My Profile</button></Link>
-            );
-        } else {
-            return (
-                <Link to="login"><button class={CheckLocation("login")} onClick={(evt) => changePage(evt)}>Log In</button></Link>
-            );
-        }
-    }
-
 
     return (
         <div class="Navigation-bar">

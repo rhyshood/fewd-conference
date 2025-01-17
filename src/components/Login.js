@@ -13,7 +13,11 @@ function Login({setLoggedInEmail}) {
     const [lName, setlName] = useState("");
     const [acceptedPP, setAcceptedPP] = useState(false);
     const [open, setOpen] = useState(false);
-    const { logInCheckStatus, loggedIn } = useCheckLogin(email, password);
+    const [loggedIn, setLoggedIn] = useState({
+        "status":"",
+        "logged":false
+    });
+    const CheckLogin = useCheckLogin().CheckLogin;
 
     const { createAccount } = GetCreateAccount();
     
@@ -25,14 +29,19 @@ function Login({setLoggedInEmail}) {
         setfName("");
         setlName("");
     }
+
+    if (loggedIn["status"] === "logging"){
+        if(loggedIn["logged"]){
+            setLoggedInEmail(email);
+        } else {
+            setLoggedIn((prevList) => ({ ...prevList, "status":"" }));
+        }
+    }
     
     function handleLogin(){
+        setLoggedIn((prevList) => ({ ...prevList, "status":"logging" }));
         if(password !== "" && email !== "" ){
-            if(logInCheckStatus === "fetched" && loggedIn){
-                setLoggedInEmail(email);
-            } else {
-                setMessage("Error: Incorrect Email/Password")
-            }
+            setLoggedIn((prevList) => ({ ...prevList, "logged":CheckLogin(email, password)}));
         } else {
             setMessage("Error: Please Complete All Fields")
         }
